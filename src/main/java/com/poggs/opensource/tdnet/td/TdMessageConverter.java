@@ -19,22 +19,31 @@ public class TdMessageConverter implements Processor {
 
         String outMessage = null;
 
-        if(msgType.equals("CA")) {
-            outMessage = CaConverter.convertMessage(msg);
-        } else if(msgType.equals("CB")) {
-            outMessage = CbConverter.convertMessage(msg);
-        } else if(msgType.equals("CC")) {
-            outMessage = CcConverter.convertMessage(msg);
-        } else if(msgType.equals("CT")) {
-            outMessage = CtConverter.convertMessage(msg);
-        } else if(msgType.equals("SF")) {
-            outMessage = SfConverter.convertMessage(msg);
-        } else if(msgType.equals("SG")) {
-            outMessage = SgConverter.convertMessage(msg);
-        } else if(msgType.equals("SH")) {
-            outMessage = ShConverter.convertMessage(msg);
-        } else {
-            System.out.println("No converter found for " + msg);
+        switch (msgType) {
+            case "CA":
+                outMessage = CaConverter.convertMessage(msg);
+                break;
+            case "CB":
+                outMessage = CbConverter.convertMessage(msg);
+                break;
+            case "CC":
+                outMessage = CcConverter.convertMessage(msg);
+                break;
+            case "CT":
+                outMessage = CtConverter.convertMessage(msg);
+                break;
+            case "SF":
+                outMessage = SfConverter.convertMessage(msg);
+                break;
+            case "SG":
+                outMessage = SgConverter.convertMessage(msg);
+                break;
+            case "SH":
+                outMessage = ShConverter.convertMessage(msg);
+                break;
+            default:
+                System.out.println("No converter found for " + msg);
+                break;
         }
 
         exchange.getIn().setBody(outMessage);
