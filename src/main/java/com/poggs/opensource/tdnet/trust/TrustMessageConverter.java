@@ -58,6 +58,7 @@ public class TrustMessageConverter implements Processor {
      * Convert a TrainActivationV1 message to JSON
      * @return A JSON type 001 message
      */
+    @SuppressWarnings("unchecked")
     private String activationToJson(TrainActivationMsgV1 msg) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -102,6 +103,7 @@ public class TrustMessageConverter implements Processor {
      * Convert a TrainCancellationMsgV1 message to JSON
      * @return A JSON type 002 message
      */
+    @SuppressWarnings("unchecked")
     private String cancellationToJson(TrainCancellationMsgV1 msg) {
 
         JSONObject responseHeader = new JSONObject();
@@ -138,6 +140,7 @@ public class TrustMessageConverter implements Processor {
      * Convert a TrainMovementMsgV1 to JSON
      * @return A JSON type 003 message
      */
+    @SuppressWarnings("unchecked")
     private String movementToJson(TrainMovementMsgV1 msg) {
 
         JSONObject responseHeader = new JSONObject();
@@ -199,6 +202,7 @@ public class TrustMessageConverter implements Processor {
      * Convert a TrainReinstatementMsgV1 to JSON
      * @return A JSON type 005 message
      */
+    @SuppressWarnings("unchecked")
     private String reinstatementToJson(TrainReinstatementMsgV1 msg) {
 
         JSONObject responseHeader = new JSONObject();

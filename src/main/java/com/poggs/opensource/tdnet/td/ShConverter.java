@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
  */
 class ShConverter {
 
+    @SuppressWarnings("unchecked")
     public static String convertMessage(String message) {
 
         JSONObject innerObj = new JSONObject();
