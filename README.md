@@ -113,11 +113,18 @@ JSON message type '0003'
 | AutoExpectedFlag        | auto_expected          | Boolean   |
 | TrainFileAddress        | train_file_address     | String    |
 
+## UnidentifiedTrainMsgV1
+
+**NOTE:** This message has never been seen from TD.net.
+
 ## TrainReinstatementMsgV1
+
+JSON message type '0005'
 
 | XML                     | JSON                    | Type      |
 |-------------------------|-------------------------|-----------|
 | OriginalTrainID         | train_id                | String    |
+| CurrentTrainID          | current_train_id        | String    |
 | EventTimestamp          | reinstatement_timestamp | Timestamp |
 | LocationStanox          | loc_stanox              | String    |
 | WTTTimestamp            | dep_timestamp           | Timestamp |
@@ -128,3 +135,54 @@ JSON message type '0003'
 
 **NOTE:** The *original_loc_timestamp* and *orig_loc_stanox* fields in Open Data JSON is not mapped to an XML field and has been excluded.
 
+## TrainChangeOriginMsgV1
+
+JSON message type '0006'
+
+| XML                    | JSON                   | Type      |
+|------------------------|------------------------|-----------|
+| OriginalTrainID        | train_id               | String    |
+| CurrentTrainID         | current_train_id       | String    |
+| EventTimestamp         | coo_timestamp          | Timestamp |
+| LocationStanox         | loc_stanox             | String    |
+| WTTTimestamp           | dep_timestamp          | Timestamp |
+| OriginalLocationStanox | original_loc_stanox    | String    |
+| OriginalWTTTimestamp   | original_loc_timestamp | Timestamp |
+| TrainServiceCode       | train_service_code     | String    |
+| ReasonCode             | reason_code            | String    |
+| Division               | division_code          | String    |
+| TOC                    | toc_id                 | String    |
+| TrainFileAddress       | train_file_address     | String    |
+
+## TrainChangeIdentityMsgV1
+
+JSON message type '0007'
+
+| XML              | JSON               | Type      |
+|------------------|--------------------|-----------|
+| OriginalTrainID  | train_id           | String    |
+| CurrentTrainID   | current_train_id   | String    |
+| EventTimestamp   | event_timestamp    | Timestamp |
+| RevisedTrainID   | revised_train_id   | String    |
+| TrainServiceCode | train_service_code | String    |
+| TrainFileAddress | train_file_address | String    |
+
+## TrainChangeLocationMsgV1
+
+JSON message type 'XXXX'
+
+| XML                   | JSON                   | Type      |
+|-----------------------|------------------------|-----------|
+| OriginalTrainID       | train_id               | String    |
+| CurrentTrainID        |
+| EventTimestamp        |
+| LocationStanox        |
+| WTTTimestamp          |
+| OriginStanox          |
+| OriginalWTTTimestamp  |
+| TrainCancellationType |
+| TrainServiceCode      | train_service_code
+| ReasonCode            | reason_code
+| Division              | division
+| TOC                   | toc_id
+| TrainFileAddress      | train_file_address

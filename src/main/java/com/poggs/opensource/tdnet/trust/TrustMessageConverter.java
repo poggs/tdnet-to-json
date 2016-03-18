@@ -4,10 +4,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.json.simple.JSONObject;
 import uk.co.networkrail.xml.ns._2008.eai.Message;
-import uk.co.networkrail.xml.ns._2008.train.TrainActivationMsgV1;
-import uk.co.networkrail.xml.ns._2008.train.TrainCancellationMsgV1;
-import uk.co.networkrail.xml.ns._2008.train.TrainMovementMsgV1;
-import uk.co.networkrail.xml.ns._2008.train.TrainReinstatementMsgV1;
+import uk.co.networkrail.xml.ns._2008.train.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -30,8 +27,6 @@ public class TrustMessageConverter implements Processor {
 
         String msgIn = exchange.getIn().getBody(String.class);
 
-        System.out.println("In = " + msgIn);
-
         StringReader msgInReader = new StringReader(msgIn);
 
         Object msgOut = jaxbUnmarshaller.unmarshal(msgInReader);
@@ -46,9 +41,11 @@ public class TrustMessageConverter implements Processor {
             response = movementToJson((TrainMovementMsgV1) msgOut);
         } else if(msgOut.getClass() == TrainReinstatementMsgV1.class) {
             response = reinstatementToJson((TrainReinstatementMsgV1) msgOut);
+        } else if(msgOut.getClass() == TrainChangeOriginMsgV1.class) {
+            response = trainChangeOriginToJson((TrainChangeOriginMsgV1) msgOut);
+        } else if(msgOut.getClass() == TrainChangeIdentityMsgV1.class) {
+            response = trainChangeIdentityToJson((TrainChangeIdentityMsgV1) msgOut);
         }
-
-        System.out.println("Out = " + response);
 
         exchange.getIn().setBody(response);
 
@@ -242,5 +239,72 @@ public class TrustMessageConverter implements Processor {
 
     }
 
+    /**
+     * Convert a TrainChangeOriginMsgV1 to JSON
+     * @return A JSON type 006 message
+     */
+    @SuppressWarnings("unchecked")
+    private String trainChangeOriginToJson(TrainChangeOriginMsgV1 msg) {
+
+        JSONObject responseHeader = new JSONObject();
+        responseHeader.put("msg_type", "0006");
+        responseHeader.put("msg_queue_timestamp", String.valueOf(msg.getTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
+        responseHeader.put("original_data_source", msg.getSender().getComponent());
+        responseHeader.put("user_id", msg.getSender().getUserID());
+        responseHeader.put("source_dev_id", msg.getSender().getSessionID());
+        responseHeader.put("source_system_id", msg.getSender().getApplication());
+
+        JSONObject responseBody = new JSONObject();
+        responseBody.put("reason_code", msg.getTrainChangeOriginData().getReasonCode());
+        responseBody.put("train_service_code", msg.getTrainChangeOriginData().getTrainServiceCode());
+        responseBody.put("original_loc_stanox", msg.getTrainChangeOriginData().getOriginalLocationStanox());
+        responseBody.put("dep_timestamp", String.valueOf(msg.getTrainChangeOriginData().getWTTTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
+        responseBody.put("current_train_id", msg.getTrainChangeOriginData().getCurrentTrainID());
+        responseBody.put("train_id", msg.getTrainChangeOriginData().getOriginalTrainID());
+        responseBody.put("original_loc_timestamp", String.valueOf(msg.getTrainChangeOriginData().getOriginalWTTTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
+        responseBody.put("toc_id", msg.getTrainChangeOriginData().getTOC());
+        responseBody.put("train_file_address", msg.getTrainChangeOriginData().getTrainFileAddress());
+        responseBody.put("coo_timestamp", String.valueOf(msg.getTrainChangeOriginData().getEventTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
+        responseBody.put("division_code", msg.getTrainChangeOriginData().getDivision());
+        responseBody.put("loc_stanox", msg.getTrainChangeOriginData().getLocationStanox());
+
+        JSONObject response = new JSONObject();
+        response.put("header", responseHeader);
+        response.put("body", responseBody);
+
+        return response.toString();
+
+    }
+
+    /**
+     * Convert a TrainChangeIdentityV1 to JSON
+     * @return A JSON type 007 message
+     */
+    @SuppressWarnings("unchecked")
+    private String trainChangeIdentityToJson(TrainChangeIdentityMsgV1 msg) {
+
+        JSONObject responseHeader = new JSONObject();
+        responseHeader.put("msg_type", "0007");
+        responseHeader.put("msg_queue_timestamp", String.valueOf(msg.getTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
+        responseHeader.put("original_data_source", msg.getSender().getComponent());
+        responseHeader.put("user_id", msg.getSender().getUserID());
+        responseHeader.put("source_dev_id", msg.getSender().getSessionID());
+        responseHeader.put("source_system_id", msg.getSender().getApplication());
+
+        JSONObject responseBody = new JSONObject();
+        responseBody.put("train_service_code", msg.getTrainChangeIdentityData().getTrainServiceCode());
+        responseBody.put("current_train_id", msg.getTrainChangeIdentityData().getCurrentTrainID());
+        responseBody.put("event_timestamp", String.valueOf(msg.getTrainChangeIdentityData().getEventTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
+        responseBody.put("train_id", msg.getTrainChangeIdentityData().getOriginalTrainID());
+        responseBody.put("revised_train_id", msg.getTrainChangeIdentityData().getRevisedTrainID());
+        responseBody.put("train_file_address", msg.getTrainChangeIdentityData().getTrainFileAddress());
+
+        JSONObject response = new JSONObject();
+        response.put("header", responseHeader);
+        response.put("body", responseBody);
+
+        return response.toString();
+
+    }
 
 }

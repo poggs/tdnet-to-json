@@ -163,4 +163,87 @@ public class TrustMessageConverterTest extends CamelTestSupport {
 
     }
 
+    @Test
+    public void convertsChangeOfOriginMessage() throws Exception {
+
+        final String expectedMessageString = "{\"header\":{\"msg_type\":\"0006\",\"source_dev_id\":\"VXNJ\",\"user_id\":\"#QHP0001\",\"original_data_source\":\"SDR\",\"msg_queue_timestamp\":\"1456917634000\",\"source_system_id\":\"TRUST\"},\"body\":{\"reason_code\":\"\",\"current_train_id\":\"\",\"original_loc_timestamp\":\"1456839840000\",\"train_file_address\":\"\",\"train_service_code\":\"22215003\",\"toc_id\":\"30\",\"dep_timestamp\":\"1456839840000\",\"coo_timestamp\":\"1456917600000\",\"division_code\":\"30\",\"loc_stanox\":\"87625\",\"train_id\":\"879D33MN01\",\"original_loc_stanox\":\"87645\"}}";
+
+        template.send("direct:start", new Processor() {
+
+            final String msgIn = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><TrainChangeOriginMsgV1 xmlns=\"http://xml.networkrail.co.uk/ns/2008/Train\" xsi:schemaLocation=\"http://xml.networkrail.co.uk/ns/2008/Train itm_train_movement_messaging_v1.12.xsd\"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:eai=\"http://xml.networkrail.co.uk/ns/2008/EAI\" xmlns:nr=\"http://xml.networkrail.co.uk/ns/2008/NR\" classification=\"industry\" timestamp=\"2016-03-02T11:20:34-00:00\" owner=\"Network Rail\" originMsgId=\"2016-03-02T11:20:34-00:00@trmv.networkrail.co.uk\" ><eai:Sender organisation=\"Network Rail\" application=\"TRUST\" component=\"SDR\" userID=\"#QHP0001\" sessionID=\"VXNJ\" /><TrainChangeOriginData><OriginalTrainID>879D33MN01</OriginalTrainID><EventTimestamp>2016-03-02T11:20:00-00:00</EventTimestamp><LocationStanox>87625</LocationStanox><WTTTimestamp>2016-03-01T13:44:00-00:00</WTTTimestamp><OriginalLocationStanox>87645</OriginalLocationStanox><OriginalWTTTimestamp>2016-03-01T13:44:00-00:00</OriginalWTTTimestamp><TrainServiceCode>22215003</TrainServiceCode><ReasonCode></ReasonCode><Division>30</Division><TOC>30</TOC><TrainFileAddress></TrainFileAddress></TrainChangeOriginData></TrainChangeOriginMsgV1>";
+
+            public void process(Exchange exchange) {
+                Message in = exchange.getIn();
+                in.setBody(msgIn);
+            }
+
+        });
+
+        assertMockEndpointsSatisfied();
+
+        List<Exchange> list = resultEndpoint.getReceivedExchanges();
+
+        Exchange firstExchange = list.get(0);
+        Message firstMessage = firstExchange.getIn();
+
+        JSONParser parser = new JSONParser();
+        JSONObject expectedMessage = (JSONObject) parser.parse(expectedMessageString);
+        JSONObject actualMessage = (JSONObject) parser.parse(firstMessage.getBody().toString());
+
+        assertEquals(expectedMessage, actualMessage);
+
+    }
+
+    @Test
+    public void convertsChangeOfIdentityMessage() throws Exception {
+
+        final String expectedMessageString = "{\"header\":{\"msg_type\":\"0007\",\"source_dev_id\":\"X282230\",\"user_id\":\"\",\"original_data_source\":\"TOPS\",\"msg_queue_timestamp\":\"1456825508000\",\"source_system_id\":\"TRUST\"},\"body\":{\"current_train_id\":\"890M45CA01\",\"train_file_address\":\"CQR\",\"train_service_code\":\"57610312\",\"revised_train_id\":\"896M45CA01\",\"train_id\":\"896M45CA01\",\"event_timestamp\":\"1456825463000\"}}";
+
+        template.send("direct:start", new Processor() {
+
+            final String msgIn = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><TrainChangeIdentityMsgV1 xmlns=\"http://xml.networkrail.co.uk/ns/2008/Train\" xsi:schemaLocation=\"http://xml.networkrail.co.uk/ns/2008/Train itm_train_movement_messaging_v1.12.xsd\"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:eai=\"http://xml.networkrail.co.uk/ns/2008/EAI\" xmlns:nr=\"http://xml.networkrail.co.uk/ns/2008/NR\" classification=\"industry\" timestamp=\"2016-03-01T09:45:08-00:00\" owner=\"Network Rail\" originMsgId=\"2016-03-01T09:45:08-00:00@trmv.networkrail.co.uk\" ><eai:Sender organisation=\"Network Rail\" application=\"TRUST\" component=\"TOPS\" userID=\"\" sessionID=\"X282230\" /><TrainChangeIdentityData><OriginalTrainID>896M45CA01</OriginalTrainID><CurrentTrainID>890M45CA01</CurrentTrainID><EventTimestamp>2016-03-01T09:44:23-00:00</EventTimestamp><RevisedTrainID>896M45CA01</RevisedTrainID><TrainServiceCode>57610312</TrainServiceCode><TrainFileAddress>CQR</TrainFileAddress></TrainChangeIdentityData></TrainChangeIdentityMsgV1>";
+
+            public void process(Exchange exchange) {
+                Message in = exchange.getIn();
+                in.setBody(msgIn);
+            }
+
+        });
+
+        assertMockEndpointsSatisfied();
+
+        List<Exchange> list = resultEndpoint.getReceivedExchanges();
+
+        Exchange firstExchange = list.get(0);
+        Message firstMessage = firstExchange.getIn();
+
+        JSONParser parser = new JSONParser();
+        JSONObject expectedMessage = (JSONObject) parser.parse(expectedMessageString);
+        JSONObject actualMessage = (JSONObject) parser.parse(firstMessage.getBody().toString());
+
+        assertEquals(expectedMessage, actualMessage);
+
+    }
+
+    @Test
+    public void producesNoOutputForInvalidMessage() throws Exception {
+
+        template.send("direct:start", new Processor() {
+
+            final String msgIn = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><UnhandledXmlMessage xmlns=\"http://xml.networkrail.co.uk/ns/2008/Train\" xsi:schemaLocation=\"http://xml.networkrail.co.uk/ns/2008/Train itm_train_movement_messaging_v1.12.xsd\"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:eai=\"http://xml.networkrail.co.uk/ns/2008/EAI\" xmlns:nr=\"http://xml.networkrail.co.uk/ns/2008/NR\" classification=\"industry\" timestamp=\"2016-03-01T09:45:08-00:00\" owner=\"Network Rail\" originMsgId=\"2016-03-01T09:45:08-00:00@trmv.networkrail.co.uk\" ></UnhandledXmlMessage>";
+
+            public void process(Exchange exchange) {
+                Message in = exchange.getIn();
+                in.setBody(msgIn);
+            }
+
+        });
+
+        assertMockEndpointsSatisfied();
+
+        List<Exchange> list = resultEndpoint.getReceivedExchanges();
+        assertEquals(0, list.size());
+
+    }
+
 }
