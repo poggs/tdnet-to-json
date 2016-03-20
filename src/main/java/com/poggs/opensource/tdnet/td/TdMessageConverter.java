@@ -1,6 +1,7 @@
 package com.poggs.opensource.tdnet.td;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Processor;
 
 /**
@@ -13,9 +14,9 @@ public class TdMessageConverter implements Processor {
 
     public void process(Exchange exchange) throws Exception {
 
-        String msg = exchange.getIn().getBody(String.class);
+        Message msg = exchange.getIn();
 
-        String msgType = msg.substring(1, 3);
+        String msgType = msg.getBody(String.class).substring(1, 3);
 
         String outMessage = null;
 

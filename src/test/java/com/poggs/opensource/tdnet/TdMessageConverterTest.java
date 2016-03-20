@@ -20,6 +20,8 @@ public class TdMessageConverterTest extends CamelTestSupport {
     @EndpointInject(uri="direct:start")
     private ProducerTemplate template;
 
+    private final String timestamp = "1451649600000";
+
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
@@ -39,9 +41,9 @@ public class TdMessageConverterTest extends CamelTestSupport {
     public void sendTdCaMessage() throws Exception {
 
         final String msgIn = "<CA_MSG>BLCA010901111M61170754</CA_MSG>";
-        final String expectedMessageString = "{\"CA_MSG\":{\"area_id\":\"BL\",\"from\":\"0109\",\"to\":\"0111\",\"descr\":\"1M61\"}}";
+        final String expectedMessageString = "{\"CA_MSG\":{\"area_id\":\"BL\",\"from\":\"0109\",\"to\":\"0111\",\"descr\":\"1M61\",\"time\":\"1451649600000\"}}";
 
-        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString);
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 
     }
 
@@ -49,9 +51,9 @@ public class TdMessageConverterTest extends CamelTestSupport {
     public void sendTdCbMessage() throws Exception {
 
         final String msgIn = "<CB_MSG>X2CBL1272V54170825</CB_MSG>";
-        final String expectedMessageString = "{\"CB_MSG\":{\"area_id\":\"X2\",\"from\":\"L127\",\"descr\":\"2V54\"}}";
+        final String expectedMessageString = "{\"CB_MSG\":{\"area_id\":\"X2\",\"from\":\"L127\",\"descr\":\"2V54\",\"time\":\"1451649600000\"}}";
 
-        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString);
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 
     }
 
@@ -59,9 +61,9 @@ public class TdMessageConverterTest extends CamelTestSupport {
     public void sendTdCcMessage() throws Exception {
 
         final String msgIn = "<CC_MSG>R1CC32661A49170851</CC_MSG>";
-        final String expectedMessageString = "{\"CC_MSG\":{\"area_id\":\"R1\",\"to\":\"3266\",\"descr\":\"1A49\"}}";
+        final String expectedMessageString = "{\"CC_MSG\":{\"area_id\":\"R1\",\"to\":\"3266\",\"descr\":\"1A49\",\"time\":\"1451649600000\"}}";
 
-        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString);
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 
     }
 
@@ -69,9 +71,9 @@ public class TdMessageConverterTest extends CamelTestSupport {
     public void sendTdSfMessage() throws Exception {
 
         final String msgIn = "<SF_MSG>NKSF0810170914</SF_MSG>";
-        final String expectedMessageString = "{\"SF_MSG\":{\"area_id\":\"NK\",\"address\":\"08\",\"data\":\"10\"}}";
+        final String expectedMessageString = "{\"SF_MSG\":{\"area_id\":\"NK\",\"address\":\"08\",\"data\":\"10\",\"time\":\"1451649600000\"}}";
 
-        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString);
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 
     }
 
@@ -79,9 +81,9 @@ public class TdMessageConverterTest extends CamelTestSupport {
     public void sendTdSgMessage() throws Exception {
 
         final String msgIn = "<SG_MSG>ECSG3401F0F8FF144308</SG_MSG>";
-        final String expectedMessageString = "{\"SG_MSG\":{\"area_id\":\"EC\",\"address\":\"34\",\"data\":\"01F0F8FF\"}}";
+        final String expectedMessageString = "{\"SG_MSG\":{\"area_id\":\"EC\",\"address\":\"34\",\"data\":\"01F0F8FF\",\"time\":\"1451649600000\"}}";
 
-        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString);
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 
     }
 
@@ -89,9 +91,9 @@ public class TdMessageConverterTest extends CamelTestSupport {
     public void sendTdShMessage() throws Exception {
 
         final String msgIn = "<SH_MSG>MZSH5839000000042707</SH_MSG>";
-        final String expectedMessageString = "{\"SH_MSG\":{\"area_id\":\"MZ\",\"address\":\"58\",\"data\":\"39000000\"}}";
+        final String expectedMessageString = "{\"SH_MSG\":{\"area_id\":\"MZ\",\"address\":\"58\",\"data\":\"39000000\",\"time\":\"1451649600000\"}}";
 
-        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString);
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 
     }
 

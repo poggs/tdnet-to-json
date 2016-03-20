@@ -26,11 +26,12 @@ class CamelTestHelper {
      * @param expectedMessageString The expected output message as a String
      * @throws Exception
      */
-    public static void sendMessage(ProducerTemplate template, MockEndpoint resultEndpoint, String msgIn, String expectedMessageString) throws Exception {
+    public static void sendMessage(ProducerTemplate template, MockEndpoint resultEndpoint, String msgIn, String expectedMessageString, String timestamp) throws Exception {
 
         template.send("direct:start", exchange -> {
             Message in = exchange.getIn();
             in.setBody(msgIn);
+            in.setHeader("JMSTimestamp", timestamp);
         });
 
         List<Exchange> list = resultEndpoint.getReceivedExchanges();

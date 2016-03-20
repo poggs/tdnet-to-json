@@ -1,5 +1,6 @@
 package com.poggs.opensource.tdnet.td;
 
+import org.apache.camel.Message;
 import org.json.simple.JSONObject;
 
 /**
@@ -10,18 +11,23 @@ import org.json.simple.JSONObject;
 class CbConverter {
 
     @SuppressWarnings("unchecked")
-    public static String convertMessage(String message) {
+    public static String convertMessage(Message message) {
+
+        String msgString = message.getBody(String.class);
 
         JSONObject innerObj = new JSONObject();
 
-        String areaId = message.substring(8, 10);
+        String areaId = msgString.substring(8, 10);
         innerObj.put("area_id", areaId);
 
-        String fromBerth = message.substring(12, 16);
+        String fromBerth = msgString.substring(12, 16);
         innerObj.put("from", fromBerth);
 
-        String descr = message.substring(16, 20);
+        String descr = msgString.substring(16, 20);
         innerObj.put("descr", descr);
+
+        String timestamp = (String) message.getHeader("JMSTimestamp");
+        innerObj.put("time", timestamp);
 
         JSONObject outerObj = new JSONObject();
         outerObj.put("CB_MSG", innerObj);
