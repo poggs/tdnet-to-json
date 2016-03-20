@@ -20,8 +20,8 @@ public class CcConverterTest {
     public void convertsMessage() throws ParseException {
 
         Message msgIn = new DefaultMessage();
+        msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<CC_MSG>R1CC32661A49170851</CC_MSG>");
-        msgIn.setHeader("JMSTimestamp", "1451649600000");
 
         String expectedMsgOutString = "{\"CC_MSG\":{\"area_id\":\"R1\",\"to\":\"3266\",\"time\":\"1451649600000\",\"descr\":\"1A49\"}}";
         JSONParser parser = new JSONParser();

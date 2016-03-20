@@ -26,7 +26,7 @@ class SfConverter {
         String descr = msgString.substring(14, 16);
         innerObj.put("data", descr);
 
-        String timestamp = (String) message.getHeader("JMSTimestamp");
+        String timestamp = String.valueOf(message.getHeader("JMSTimestamp"));
         innerObj.put("time", timestamp);
 
         JSONObject outerObj = new JSONObject();

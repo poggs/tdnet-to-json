@@ -23,7 +23,7 @@ class CtConverter {
         String fromBerth = msgString.substring(12, 16);
         innerObj.put("report_time", fromBerth);
 
-        String timestamp = (String) message.getHeader("JMSTimestamp");
+        String timestamp = String.valueOf(message.getHeader("JMSTimestamp"));
         innerObj.put("time", timestamp);
 
         JSONObject outerObj = new JSONObject();

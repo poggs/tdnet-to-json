@@ -20,8 +20,8 @@ public class CtConverterTest {
     public void convertsMessage() throws ParseException {
 
         Message msgIn = new DefaultMessage();
+        msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<CT_MSG>LSCT0332033147</CT_MSG>");
-        msgIn.setHeader("JMSTimestamp", "1451649600000");
 
         String expectedMsgOutString = "{\"CT_MSG\":{\"area_id\":\"LS\",\"report_time\":\"0332\",\"time\":\"1451649600000\"}}";
         JSONParser parser = new JSONParser();

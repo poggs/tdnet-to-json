@@ -20,8 +20,8 @@ public class CbConverterTest {
     public void convertsMessage() throws ParseException {
 
         Message msgIn = new DefaultMessage();
+        msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<CB_MSG>X2CBL1272V54170825</CB_MSG>");
-        msgIn.setHeader("JMSTimestamp", "1451649600000");
 
         String expectedMsgOutString = "{\"CB_MSG\":{\"area_id\":\"X2\",\"from\":\"L127\",\"time\":\"1451649600000\",\"descr\":\"2V54\"}}";
         JSONParser parser = new JSONParser();

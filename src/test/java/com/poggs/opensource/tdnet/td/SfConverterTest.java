@@ -20,8 +20,8 @@ public class SfConverterTest {
     public void convertsMessage() throws ParseException {
 
         Message msgIn = new DefaultMessage();
+        msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<SF_MSG>NKSF0810170914</SF_MSG>");
-        msgIn.setHeader("JMSTimestamp", "1451649600000");
 
         String expectedMsgOutString = "{\"SF_MSG\":{\"area_id\":\"NK\",\"address\":\"08\",\"data\":\"10\",\"time\":\"1451649600000\"}}";
         JSONParser parser = new JSONParser();

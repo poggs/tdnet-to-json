@@ -26,7 +26,7 @@ class CbConverter {
         String descr = msgString.substring(16, 20);
         innerObj.put("descr", descr);
 
-        String timestamp = (String) message.getHeader("JMSTimestamp");
+        String timestamp = String.valueOf(message.getHeader("JMSTimestamp"));
         innerObj.put("time", timestamp);
 
         JSONObject outerObj = new JSONObject();

@@ -20,8 +20,8 @@ public class SgConverterTest {
     public void convertsMessage() throws ParseException {
 
         Message msgIn = new DefaultMessage();
+        msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<SG_MSG>ECSG3401F0F8FF144308</SG_MSG>");
-        msgIn.setHeader("JMSTimestamp", "1451649600000");
 
         String expectedMsgOutString = "{\"SG_MSG\":{\"area_id\":\"EC\",\"address\":\"34\",\"data\":\"01F0F8FF\",\"time\":\"1451649600000\"}}";
         JSONParser parser = new JSONParser();

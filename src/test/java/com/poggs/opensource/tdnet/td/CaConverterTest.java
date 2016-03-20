@@ -20,7 +20,7 @@ public class CaConverterTest {
     public void convertsMessage() throws ParseException {
 
         Message msgIn = new DefaultMessage();
-        msgIn.setHeader("JMSTimestamp", "1451649600000");
+        msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<CA_MSG>BLCA010901111M61170754</CA_MSG>");
 
         String expectedMsgOutString = "{\"CA_MSG\":{\"area_id\":\"BL\",\"from\":\"0109\",\"to\":\"0111\",\"time\":\"1451649600000\",\"descr\":\"1M61\"}}";
