@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 sp1 (http://www.altova.com) by JDarcy (Network Rail Infrastructure Ltd) -->
+<xsd:schema xmlns:nr="http://xml.networkrail.co.uk/ns/2008/NR" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:itm="http://xml.networkrail.co.uk/ns/2008/Train" targetNamespace="http://xml.networkrail.co.uk/ns/2008/Train" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:annotation>
+		<xsd:documentation>
+
+This schema provides those data types that are common across all train movement related systems. 
+
+Change History
+=========
+Version	mm/yy	Author			Description
+---------	-------	------------	---------------------
+1.0			01/08	J D'Arcy		Initial Creation
+1.1			03/08	J D'Arcy		WTTID added, AttributionReason removed from Attribution Status Msg
+1.2			04/08	J D'Arcy		Needed to replace use of nr:DateTime with xsd:dateTime as Messaging Hub
+												cannot recognise pattern facet used.
+1.3			05/08	J D'Arcy		Updated following IBM Testing to change how Current and Original Train Ids are used to make consistent with Train Movement messages.
+1.4			06/08 	J D'Arcy		Changed many types to replace length attribute with min length / max length pairs to enable Hub v5 validation to be performed correclty.
+1.5		   	07/08	J D'Arcy		Changed enumeration values of Variation Ststus to include LATE but not REINSTATMENT, CANCELLATIOn or ORIGIN CHANGE.
+1.6			07/08	J D'Arcy		Added Sector as a new element, and updated delay alert data.
+1.7			09/08	J D'Arcy		Incorporation of new types to support additional incident fields from TRUST
+1.8			11/08	J D'Arcy		Updated to include a NetworkDelay and Update element to the DelayAttributionDate complex type.
+1.9			03/09	J D'Arcy		Updated to include itm_types_v5.4 
+1.10			03/09	J D'Arcy		Updated to include itm_types_v5.5, UIDNumber changed to allow 5 or 6 characters, and ResponsibleTrainID changed to use TrainIDFreeTextType. 
+1.11			08/09	J D'Arcy		Updated to allow for delay minutes values to contain zero values.
+1.12			12/09	I Inglis		Updated to include itm_types_v5.6, DelayXRef length changed to allow 01-99 and 001-999 values.
+
+(c) Copyright Network Rail
+
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:import namespace="http://xml.networkrail.co.uk/ns/2008/NR" schemaLocation="nr_types_v8.xsd"/>
+	<xsd:include schemaLocation="itm_types_v5.6.xsd"/>
+	<xsd:element name="AlertHeader" type="itm:AlertHeaderType">
+		<xsd:annotation>
+			<xsd:documentation>Composite group of common alert header data</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AlertNumber" type="itm:TRUSTAlertNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Delay alert number</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AlertTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>A generic alert timestamp</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AlertType" type="itm:AlertType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates whether this is an alert or an alert cancellation</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Area" type="itm:TRUSTAreaType">
+		<xsd:annotation>
+			<xsd:documentation>Trust Area</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Attributed" type="xsd:nonNegativeInteger">
+		<xsd:annotation>
+			<xsd:documentation>Attributed Delay Minutes</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AttributedFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Context Specific Attributed Flag</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AttributionReason" type="itm:DelayAlertReasonType">
+		<xsd:annotation>
+			<xsd:documentation>Identifies the cause for the attribution event</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AttributionSuccessFlag">
+		<xsd:annotation>
+			<xsd:documentation>Attribution success flag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:enumeration value="Y"/>
+				<xsd:enumeration value="N"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="AttributionStatus" type="itm:AttributionStatusType">
+		<xsd:annotation>
+			<xsd:documentation>Status of the attribution</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AttributionStatusData">
+		<xsd:annotation>
+			<xsd:documentation>Attribution status data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="itm:EventTimestamp"/>
+				<xsd:element ref="itm:IncidentID" minOccurs="0"/>
+				<xsd:element name="ResponseCode">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:nonNegativeInteger">
+							<xsd:minInclusive value="0"/>
+							<xsd:maxInclusive value="9999"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:element>
+				<xsd:element name="ResponseText" minOccurs="0">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:maxLength value="70"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="AttributionUpdateType" type="itm:UpdateType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates what type of Update this is.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AttributionText">
+		<xsd:annotation>
+			<xsd:documentation>Freetext associated with a delay attribution</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="70"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="AutoExpectedFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Indicates that the next report is expected to be automatic</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="BRSCode">
+		<xsd:annotation>
+			<xsd:documentation>BRS Code</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="5"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="CancellationType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates a Change of Origin or Cancellation</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:enumeration value="C"/>
+				<xsd:enumeration value="O"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="ConfirmedFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>General purpose confirmation flag</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="CurrentTrainID" type="itm:TRUSTTrainId">
+		<xsd:annotation>
+			<xsd:documentation>Identifier of a train</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Delay" type="xsd:nonNegativeInteger">
+		<xsd:annotation>
+			<xsd:documentation>Delay Minutes</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="DelayAlertReason" type="itm:DelayAlertReasonType">
+		<xsd:annotation>
+			<xsd:documentation>Identifies the cause for the delay alert</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="DelayAttributionData">
+		<xsd:annotation>
+			<xsd:documentation>General train attribution data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="itm:AttributionReason"/>
+				<xsd:element ref="itm:IncidentID"/>
+				<xsd:element ref="itm:CurrentTrainID"/>
+				<xsd:element ref="itm:OriginalTrainID" minOccurs="0"/>
+				<xsd:element ref="itm:LocationStanox" minOccurs="0"/>
+				<xsd:element ref="itm:EndLocationStanox" minOccurs="0"/>
+				<xsd:element ref="itm:AlertNumber" minOccurs="0"/>
+				<xsd:element ref="itm:DelayXRef" minOccurs="0"/>
+				<xsd:element ref="itm:Attributed" minOccurs="0"/>
+				<xsd:element ref="itm:ReasonCode" minOccurs="0"/>
+				<xsd:element ref="itm:ResponsibleTrain" minOccurs="0"/>
+				<xsd:element ref="itm:Location" minOccurs="0"/>
+				<xsd:element ref="itm:EquipmentNumber" minOccurs="0"/>
+				<xsd:element ref="itm:DelayLongDecription" minOccurs="0"/>
+				<xsd:element ref="itm:ConfirmedFlag"/>
+				<xsd:element ref="itm:NetworkDelayFlag" minOccurs="0"/>
+				<xsd:element ref="itm:AttributionUpdateType" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DelayLongDecription">
+		<xsd:annotation>
+			<xsd:documentation>Freeform description of a delay</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="60"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="DelayMonitoringFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Indicates that this is a delay monitoring point</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="DelayXRef" type="itm:TRUSTDelayXrefType">
+		<xsd:annotation>
+			<xsd:documentation>Delay cross reference</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="DepartureTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Train departure event date time</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Direction" type="itm:DirectionType">
+		<xsd:annotation>
+			<xsd:documentation>Direction indicator</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Division">
+		<xsd:annotation>
+			<xsd:documentation>STRAMS Sector</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="2"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="EndLocationStanme" type="itm:STANME">
+		<xsd:annotation>
+			<xsd:documentation>End of section delay</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="EndLocationStanox" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>End station or end of section</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="EquipmentNumber">
+		<xsd:annotation>
+			<xsd:documentation>EquipmentNumber</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="9"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="EventInitiation" type="itm:EventInitiationType">
+		<xsd:annotation>
+			<xsd:documentation>Was the event initiated via a manual or automatic source</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="EventSource" type="itm:EventSourceType">
+		<xsd:annotation>
+			<xsd:documentation>Manual or Automatic event</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="EventTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Train event date time</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="FaultNumber">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Fault Number</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="8"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="FaultSystem">
+		<xsd:annotation>
+			<xsd:documentation>Fault System</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="1"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="FTS">
+		<xsd:annotation>
+			<xsd:documentation>FTS Dummy Element for possible future use</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="3"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="FTSAttributedFlag">
+		<xsd:annotation>
+			<xsd:documentation>FTS Attribution Indicator</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="3"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="GBTTTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>GB Timetable timestamp</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentAttributionStatus" type="itm:AttributionStatusType">
+		<xsd:annotation>
+			<xsd:documentation>Attribution Status for an incident</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentCloseTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Incident Close Timestamp</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentDescription">
+		<xsd:annotation>
+			<xsd:documentation>Formal description of an incident</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="30"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="IncidentEndTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Incident End Timestamp</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentID" type="itm:IncidentIDType">
+		<xsd:annotation>
+			<xsd:documentation>ID for an delay alert requiring attribution</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentStatus" type="itm:IncidentStatusType">
+		<xsd:annotation>
+			<xsd:documentation>Status of an incident</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Incident Start Timestamp</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="IncidentType">
+		<xsd:annotation>
+			<xsd:documentation>Incident Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="1"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="Line" type="itm:LineType">
+		<xsd:annotation>
+			<xsd:documentation>Train Line </xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Location">
+		<xsd:annotation>
+			<xsd:documentation>Freeform Location data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="15"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="LocationStanme" type="itm:STANME">
+		<xsd:annotation>
+			<xsd:documentation>Delay at station or start of section delay</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="LocationStanox" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Stanox location for a specified event</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="NCI">
+		<xsd:annotation>
+			<xsd:documentation>NCI</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="8"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="NextLocationStanox" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Stanox location where next report is expected</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="MergedIncident" type="itm:IncidentIDType">
+		<xsd:annotation>
+			<xsd:documentation>Key of an incident merged into this incident</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="MessageQueueTime" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Time when the IDAS attribution message was queued</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="MessageText">
+		<xsd:annotation>
+			<xsd:documentation>Free format text message</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="80"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="NetworkDelayFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Flag to indicate whether an attribution is caused by a network delay or not.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="MovementType" type="itm:TrainMovementType">
+		<xsd:annotation>
+			<xsd:documentation>Type of Train Movement</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="NextReportRunTime" type="itm:DurationType">
+		<xsd:annotation>
+			<xsd:documentation>How long till reach next reporting point</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="OffRouteFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Indicates an Off Route event</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="OperatorData">
+		<xsd:annotation>
+			<xsd:documentation>Operator Message event data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="itm:EventTimestamp"/>
+				<xsd:element name="DAMessageType" type="itm:TRUSTDAMessageType"/>
+				<xsd:element ref="itm:MessageText"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="OriginalAlertNumber" type="itm:TRUSTAlertNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Original Alert Number</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="OriginalLocationStanox" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Original Stanox location for a specified event</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="OriginStanox" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Departure Stanox location</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="OriginalTrainID" type="itm:TRUSTTrainId">
+		<xsd:annotation>
+			<xsd:documentation>Original Train ID</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="OriginalWTTTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Original Working timetable event timestamp - Arrival, Departure, Passing</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="PlannedDepartureTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Planned train departure event timestamp</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="PlannedMovementType" type="itm:TrainMovementType">
+		<xsd:annotation>
+			<xsd:documentation>Planned Train Movement type</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Platform" type="itm:PlatformType">
+		<xsd:annotation>
+			<xsd:documentation>Platform</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="RailtrackManagerCode">
+		<xsd:annotation>
+			<xsd:documentation>Railtrack Manager Code</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="4"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="ReasonCode">
+		<xsd:annotation>
+			<xsd:documentation>Delay/FTS/Cancelation/COO Code</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="2"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="ReasonDescription">
+		<xsd:annotation>
+			<xsd:documentation>Formal description of the reason for the delay/FTS</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="10"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="ReportingLocationStanox" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Stanox location for reporting if not at current stanox</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ResponsibleManager">
+		<xsd:annotation>
+			<xsd:documentation>The responsible manager for an incident</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="4"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="ResponsibleTrain" type="itm:TrainIdTextType">
+		<xsd:annotation>
+			<xsd:documentation>Free text field to identify the train responsible for a delay</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="RevisionFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Revision Flag</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="RevisedTrainID" type="itm:TRUSTTrainId">
+		<xsd:annotation>
+			<xsd:documentation>Revised Train ID</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="RolledUpFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Rolled Up Flag</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Route" type="itm:TRUSTRouteType">
+		<xsd:annotation>
+			<xsd:documentation>Route</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ScheduledWTTID" type="itm:WTTID">
+		<xsd:annotation>
+			<xsd:documentation>Scheduled WTTID</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ScheduleEndTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Schedule valid to date time</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ScheduleSource" type="itm:ScheduleSource">
+		<xsd:annotation>
+			<xsd:documentation>Schedule source</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ScheduleStartTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Schedule valid from date time</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ScheduleType" type="itm:ScheduleType">
+		<xsd:annotation>
+			<xsd:documentation>Schedule type</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Sector">
+		<xsd:annotation>
+			<xsd:documentation>Sector</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:nonNegativeInteger">
+				<xsd:maxInclusive value="99"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="SplitFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Indicates delay not in TRUST section</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+		<xsd:element name="StationCrossReference" type="itm:TRUSTDelayXrefType">
+		<xsd:annotation>
+			<xsd:documentation>Station Cross Reference</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TerminatedFlag" type="xsd:boolean">
+		<xsd:annotation>
+			<xsd:documentation>Indicates that the train has terminated</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TOC">
+		<xsd:annotation>
+			<xsd:documentation>Train Operating Company</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:minLength value="2"/>
+				<xsd:maxLength value="2"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="TOPSUID" type="itm:TOPSUID">
+		<xsd:annotation>
+			<xsd:documentation>Schedule as in TOPS</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TimetableVariation" type="itm:DurationType">
+		<xsd:annotation>
+			<xsd:documentation>Variation from timetable</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TrainCallMode">
+		<xsd:annotation>
+			<xsd:documentation>Train Call Mode</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:enumeration value="NORMAL"/>
+				<xsd:enumeration value="OVERNIGHT"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="TrainCallType">
+		<xsd:annotation>
+			<xsd:documentation>Train Call Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:enumeration value="MANUAL"/>
+				<xsd:enumeration value="AUTO"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="TrainCancellationType" type="itm:CancellationType">
+		<xsd:annotation>
+			<xsd:documentation>Reason for a train cancellation</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TrainDelayAlertData">
+		<xsd:annotation>
+			<xsd:documentation>General train delay data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="itm:DelayAlertReason"/>
+				<xsd:element ref="itm:AlertType"/>
+				<xsd:element ref="itm:AlertTimestamp"/>
+				<xsd:element ref="itm:CurrentTrainID">
+					<xsd:annotation>
+						<xsd:documentation>Current Identifier of a train</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="itm:OriginalTrainID" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Original Train ID only present if the train id has changed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="itm:LocationStanox"/>
+				<xsd:element ref="itm:LocationStanme"/>
+				<xsd:element ref="itm:EndLocationStanox" minOccurs="0"/>
+				<xsd:element ref="itm:EndLocationStanme" minOccurs="0"/>
+				<xsd:element ref="itm:Delay" minOccurs="0"/>
+				<xsd:element ref="itm:Unexplained" minOccurs="0"/>
+				<xsd:element ref="itm:Unattributed" minOccurs="0"/>
+				<xsd:element ref="itm:FTS" minOccurs="0"/>
+				<xsd:element ref="itm:FTSAttributedFlag" minOccurs="0"/>
+				<xsd:element ref="itm:RevisionFlag" minOccurs="0"/>
+				<xsd:element ref="itm:SplitFlag" minOccurs="0"/>
+				<xsd:element ref="itm:OriginalAlertNumber" minOccurs="0"/>
+				<xsd:element ref="itm:DelayXRef" minOccurs="0"/>
+				<xsd:element ref="itm:ReasonCode" minOccurs="0"/>
+				<xsd:element ref="itm:ReasonDescription" minOccurs="0"/>
+				<xsd:element ref="itm:EquipmentNumber" minOccurs="0"/>
+				<xsd:element ref="itm:Location" minOccurs="0"/>
+				<xsd:element ref="itm:ResponsibleTrain" minOccurs="0"/>
+				<xsd:element ref="itm:DelayLongDecription" minOccurs="0"/>
+				<xsd:element ref="itm:RolledUpFlag" minOccurs="0"/>
+				<xsd:element ref="itm:AttributedFlag" minOccurs="0"/>
+				<xsd:element ref="itm:Sector" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="TrainFileAddress">
+		<xsd:annotation>
+			<xsd:documentation>TOPS Train File Address</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="3"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="TrainPlanOrigin" type="itm:STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Train Origin if changed</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TrainPlanOriginTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Timestamp of change</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="TrainServiceCode">
+		<xsd:annotation>
+			<xsd:documentation>Train Service Code</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:maxLength value="8"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="Unattributed" type="xsd:nonNegativeInteger">
+		<xsd:annotation>
+			<xsd:documentation>Unattributed Delay Minutes</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="Unexplained" type="xsd:nonNegativeInteger">
+		<xsd:annotation>
+			<xsd:documentation>Unexplained Delay Minutes</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="UpdateType">
+		<xsd:annotation>
+			<xsd:documentation>Type of update</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:enumeration value="A"/>
+				<xsd:enumeration value="U"/>
+				<xsd:enumeration value="M"/>
+				<xsd:enumeration value="D"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="WTTID" type="itm:WTTID">
+		<xsd:annotation>
+			<xsd:documentation>Working timetable identifier</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="WTTTimestamp" type="xsd:dateTime">
+		<xsd:annotation>
+			<xsd:documentation>Working timetable timestamp - Arrival, Departure, Passing</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="UIDNumber">
+		<xsd:annotation>
+			<xsd:documentation>UID Number</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:minLength value="5"/>
+				<xsd:maxLength value="6"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="VariationStatus">
+		<xsd:annotation>
+			<xsd:documentation>Variation status</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:enumeration value="EARLY"/>
+				<xsd:enumeration value="ON TIME"/>
+				<xsd:enumeration value="OFF ROUTE"/>
+				<xsd:enumeration value="LATE"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name="Zone" type="itm:TRUSTZoneType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Zone</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+</xsd:schema>
