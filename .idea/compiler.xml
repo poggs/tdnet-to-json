@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="tdnet-to-json" />
         <module name="TdnetToJson" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="tdnet-to-json" target="1.8" />
       <module name="TdnetToJson" target="1.8" />
     </bytecodeTargetLevel>
   </component>
