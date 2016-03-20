@@ -105,10 +105,10 @@
                 <configuration>
                     <packageName>com.poggs.opensource.tdnet.networkrail</packageName>
                     <sources>
-                        <source>src/main/resources/xsd</source>
+                        <source>xml-schema/xsd</source>
                     </sources>
                     <xjbSources>
-                        <source>src/main/resources/xjb</source>
+                        <source>xml-schema/xjb</source>
                     </xjbSources>
                     <xjbExcludeFilters>
                         <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
