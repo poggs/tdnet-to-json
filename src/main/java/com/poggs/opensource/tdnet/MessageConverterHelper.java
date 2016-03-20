@@ -14,8 +14,16 @@ public class MessageConverterHelper {
      * @param input An input string or null
      * @return An empty string if the input string is null, otherwise returns the input string
      */
-    public static String emptyIfNull(String input) {
-        return input == null ? "" : input;
+    public static String emptyIfNull(Object input) {
+
+        String returnValue = "";
+
+        if(input != null) {
+            returnValue = input.toString();
+        }
+
+        return returnValue;
+
     }
 
     /**

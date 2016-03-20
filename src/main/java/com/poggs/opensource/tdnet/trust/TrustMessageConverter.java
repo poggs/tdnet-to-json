@@ -70,7 +70,7 @@ public class TrustMessageConverter implements Processor {
         responseHeader.put("source_system_id", msg.getSender().getApplication());
 
         JSONObject responseBody = new JSONObject();
-        responseBody.put("schedule_source", msg.getTrainActivationData().getScheduleSource().toString());
+        responseBody.put("schedule_source", MessageConverterHelper.emptyIfNull(msg.getTrainActivationData().getScheduleSource()));
         responseBody.put("train_file_address", msg.getTrainActivationData().getTrainFileAddress());
         responseBody.put("schedule_end_date", dateFormat.format(msg.getTrainActivationData().getScheduleEndTimestamp().toGregorianCalendar().getTime()));
         responseBody.put("train_id", msg.getTrainActivationData().getOriginalTrainID());
@@ -81,10 +81,10 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("train_service_code", msg.getTrainActivationData().getTrainServiceCode());
         responseBody.put("toc_id", msg.getTrainActivationData().getTOC());
         responseBody.put("d1266_record_number", msg.getTrainActivationData().getTOPSUID());
-        responseBody.put("train_call_type", msg.getTrainActivationData().getEventSource().toString());
+        responseBody.put("train_call_type", MessageConverterHelper.emptyIfNull(msg.getTrainActivationData().getEventSource()));
         responseBody.put("train_uid", msg.getTrainActivationData().getUIDNumber());
         responseBody.put("train_call_mode", msg.getTrainActivationData().getTrainCallMode());
-        responseBody.put("schedule_type", msg.getTrainActivationData().getScheduleType().toString());
+        responseBody.put("schedule_type", MessageConverterHelper.emptyIfNull(msg.getTrainActivationData().getScheduleType()));
         responseBody.put("sched_origin_stanox", msg.getTrainActivationData().getLocationStanox()); // CHECK
         responseBody.put("schedule_wtt_id", msg.getTrainActivationData().getScheduledWTTID());
         responseBody.put("schedule_start_date", dateFormat.format(msg.getTrainActivationData().getScheduleStartTimestamp().toGregorianCalendar().getTime()));
@@ -124,7 +124,7 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("canx_reason_code", msg.getTrainCancellationData().getReasonCode());
         responseBody.put("train_id", msg.getTrainCancellationData().getOriginalTrainID());
         responseBody.put("orig_loc_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainCancellationData().getOriginalWTTTimestamp()));
-        responseBody.put("canx_type", msg.getTrainCancellationData().getTrainCancellationType().toString().replaceAll("_", " "));
+        responseBody.put("canx_type", MessageConverterHelper.emptyIfNull(msg.getTrainCancellationData().getTrainCancellationType()).replaceAll("_", " "));
 
         JSONObject response = new JSONObject();
         response.put("header", responseHeader);
@@ -151,23 +151,23 @@ public class TrustMessageConverter implements Processor {
 
         JSONObject responseBody = new JSONObject();
         responseBody.put("variation_status", msg.getTrainMovementData().getVariationStatus());
-        responseBody.put("event_source", msg.getTrainMovementData().getEventSource().toString());
+        responseBody.put("event_source", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getEventSource()));
         responseBody.put("line_ind", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getLine()));
         responseBody.put("platform", msg.getTrainMovementData().getPlatform());
         responseBody.put("toc_id", msg.getTrainMovementData().getTOC());
         responseBody.put("reporting_stanox", msg.getTrainMovementData().getReportingLocationStanox());
-        responseBody.put("event_type", msg.getTrainMovementData().getMovementType().toString());
+        responseBody.put("event_type", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getMovementType()));
         responseBody.put("train_service_code", msg.getTrainMovementData().getTrainServiceCode());
         responseBody.put("planned_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainMovementData().getWTTTimestamp()));
-        responseBody.put("next_report_run_time", msg.getTrainMovementData().getNextReportRunTime().toString());
-        responseBody.put("auto_expected", msg.getTrainMovementData().isAutoExpectedFlag().toString());
+        responseBody.put("next_report_run_time", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getNextReportRunTime()));
+        responseBody.put("auto_expected", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().isAutoExpectedFlag()));
         responseBody.put("current_train_id", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getCurrentTrainID()));
         responseBody.put("division_code", msg.getTrainMovementData().getDivision());
         responseBody.put("timetable_variation", String.valueOf(msg.getTrainMovementData().getTimetableVariation()));
-        responseBody.put("delay_monitoring_point", msg.getTrainMovementData().isDelayMonitoringFlag().toString());
+        responseBody.put("delay_monitoring_point", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().isDelayMonitoringFlag()));
         responseBody.put("original_loc_stanox", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getOriginalLocationStanox()));
-        responseBody.put("correction_ind", msg.getTrainMovementData().isRevisionFlag().toString());
-        responseBody.put("planned_event_type", msg.getTrainMovementData().getPlannedMovementType().toString());
+        responseBody.put("correction_ind", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().isRevisionFlag()));
+        responseBody.put("planned_event_type", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getPlannedMovementType()));
 
         XMLGregorianCalendar originalWTTTimestamp = msg.getTrainMovementData().getOriginalWTTTimestamp();
 
@@ -180,13 +180,13 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("train_file_address", msg.getTrainMovementData().getTrainFileAddress());
         responseBody.put("loc_stanox", msg.getTrainMovementData().getLocationStanox());
         responseBody.put("actual_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainMovementData().getEventTimestamp()));
-        responseBody.put("direction_ind", msg.getTrainMovementData().getDirection().toString());
+        responseBody.put("direction_ind", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getDirection()));
         responseBody.put("route", msg.getTrainMovementData().getRoute());
         responseBody.put("next_report_stanox", msg.getTrainMovementData().getNextLocationStanox());
-        responseBody.put("offroute_ind", msg.getTrainMovementData().isOffRouteFlag().toString());
+        responseBody.put("offroute_ind", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().isOffRouteFlag()));
         responseBody.put("gbtt_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainMovementData().getGBTTTimestamp()));
         responseBody.put("train_id", msg.getTrainMovementData().getOriginalTrainID());
-        responseBody.put("train_terminated", msg.getTrainMovementData().isTerminatedFlag().toString());
+        responseBody.put("train_terminated", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().isTerminatedFlag()));
 
         JSONObject response = new JSONObject();
         response.put("header", responseHeader);
