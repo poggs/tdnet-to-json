@@ -110,6 +110,13 @@
                     <xjbSources>
                         <source>src/main/resources/xjb</source>
                     </xjbSources>
+                    <xjbExcludeFilters>
+                        <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
+                            <patterns>
+                                <pattern>\.gitignore</pattern>
+                            </patterns>
+                        </filter>
+                    </xjbExcludeFilters>
                 </configuration>
             </plugin>
             <plugin>
