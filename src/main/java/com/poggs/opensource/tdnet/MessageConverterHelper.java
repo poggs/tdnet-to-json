@@ -1,5 +1,7 @@
 package com.poggs.opensource.tdnet;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 /**
  * Common helper methods for TD.net message conversion
  *
@@ -14,6 +16,24 @@ public class MessageConverterHelper {
      */
     public static String emptyIfNull(String input) {
         return input == null ? "" : input;
+    }
+
+    /**
+     * Convert an XMLGregorianCalendar object in to epoch seconds
+     * @param input An XMLGregorianCalendar object
+     * @return The number of milliseconds since the UNIX epoch as a String
+     */
+    public static String timestampToEpochSecs(XMLGregorianCalendar input) {
+
+        String returnValue = "";
+
+        if(input != null) {
+            long timestamp = input.toGregorianCalendar().toInstant().toEpochMilli();
+            returnValue = String.valueOf(timestamp);
+        }
+
+        return returnValue;
+
     }
 
 }
