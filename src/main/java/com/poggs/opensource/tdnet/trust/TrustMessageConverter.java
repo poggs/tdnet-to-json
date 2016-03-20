@@ -1,5 +1,6 @@
 package com.poggs.opensource.tdnet.trust;
 
+import com.poggs.opensource.tdnet.MessageConverterHelper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.json.simple.JSONObject;
@@ -75,7 +76,7 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("train_id", msg.getTrainActivationData().getOriginalTrainID());
         responseBody.put("tp_origin_timestamp", String.valueOf(msg.getTrainActivationData().getTrainPlanOriginTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
         responseBody.put("creation_timestamp", String.valueOf(msg.getTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
-        responseBody.put("tp_origin_stanox", msg.getTrainActivationData().getTrainPlanOrigin());
+        responseBody.put("tp_origin_stanox", MessageConverterHelper.emptyIfNull(msg.getTrainActivationData().getTrainPlanOrigin()));
         responseBody.put("origin_dep_timestamp", String.valueOf(msg.getTrainActivationData().getWTTTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
         responseBody.put("train_service_code", msg.getTrainActivationData().getTrainServiceCode());
         responseBody.put("toc_id", msg.getTrainActivationData().getTOC());
@@ -151,7 +152,7 @@ public class TrustMessageConverter implements Processor {
         JSONObject responseBody = new JSONObject();
         responseBody.put("variation_status", msg.getTrainMovementData().getVariationStatus());
         responseBody.put("event_source", msg.getTrainMovementData().getEventSource().toString());
-        responseBody.put("line_ind", msg.getTrainMovementData().getLine());
+        responseBody.put("line_ind", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getLine()));
         responseBody.put("platform", msg.getTrainMovementData().getPlatform());
         responseBody.put("toc_id", msg.getTrainMovementData().getTOC());
         responseBody.put("reporting_stanox", msg.getTrainMovementData().getReportingLocationStanox());
@@ -160,11 +161,11 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("planned_timestamp", String.valueOf(msg.getTrainMovementData().getWTTTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
         responseBody.put("next_report_run_time", msg.getTrainMovementData().getNextReportRunTime().toString());
         responseBody.put("auto_expected", msg.getTrainMovementData().isAutoExpectedFlag().toString());
-        responseBody.put("current_train_id", msg.getTrainMovementData().getCurrentTrainID());
+        responseBody.put("current_train_id", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getCurrentTrainID()));
         responseBody.put("division_code", msg.getTrainMovementData().getDivision());
         responseBody.put("timetable_variation", String.valueOf(msg.getTrainMovementData().getTimetableVariation()));
         responseBody.put("delay_monitoring_point", msg.getTrainMovementData().isDelayMonitoringFlag().toString());
-        responseBody.put("original_loc_stanox", msg.getTrainMovementData().getOriginalLocationStanox());
+        responseBody.put("original_loc_stanox", MessageConverterHelper.emptyIfNull(msg.getTrainMovementData().getOriginalLocationStanox()));
         responseBody.put("correction_ind", msg.getTrainMovementData().isRevisionFlag().toString());
         responseBody.put("planned_event_type", msg.getTrainMovementData().getPlannedMovementType().toString());
 
@@ -213,7 +214,7 @@ public class TrustMessageConverter implements Processor {
         JSONObject responseBody = new JSONObject();
         responseBody.put("train_service_code", msg.getTrainReinstatementData().getTrainServiceCode());
         responseBody.put("reinstatement_timestamp", String.valueOf(msg.getTrainReinstatementData().getEventTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
-        responseBody.put("original_loc_stanox", msg.getTrainReinstatementData().getOriginalLocationStanox());
+        responseBody.put("original_loc_stanox", MessageConverterHelper.emptyIfNull(msg.getTrainReinstatementData().getOriginalLocationStanox()));
 
         XMLGregorianCalendar wttTimestamp = msg.getTrainReinstatementData().getWTTTimestamp();
 
@@ -223,7 +224,7 @@ public class TrustMessageConverter implements Processor {
             responseBody.put("dep_timestamp", String.valueOf(wttTimestamp.toGregorianCalendar().toInstant().toEpochMilli()));
         }
 
-        responseBody.put("current_train_id", msg.getTrainReinstatementData().getCurrentTrainID());
+        responseBody.put("current_train_id", MessageConverterHelper.emptyIfNull(msg.getTrainReinstatementData().getCurrentTrainID()));
         responseBody.put("train_id", msg.getTrainReinstatementData().getOriginalTrainID());
         responseBody.put("original_loc_timestamp", ""); // Unused
         responseBody.put("toc_id", msg.getTrainReinstatementData().getTOC());
@@ -259,7 +260,7 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("train_service_code", msg.getTrainChangeOriginData().getTrainServiceCode());
         responseBody.put("original_loc_stanox", msg.getTrainChangeOriginData().getOriginalLocationStanox());
         responseBody.put("dep_timestamp", String.valueOf(msg.getTrainChangeOriginData().getWTTTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
-        responseBody.put("current_train_id", msg.getTrainChangeOriginData().getCurrentTrainID());
+        responseBody.put("current_train_id", MessageConverterHelper.emptyIfNull(msg.getTrainChangeOriginData().getCurrentTrainID()));
         responseBody.put("train_id", msg.getTrainChangeOriginData().getOriginalTrainID());
         responseBody.put("original_loc_timestamp", String.valueOf(msg.getTrainChangeOriginData().getOriginalWTTTimestamp().toGregorianCalendar().toInstant().toEpochMilli()));
         responseBody.put("toc_id", msg.getTrainChangeOriginData().getTOC());
