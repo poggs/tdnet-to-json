@@ -14,12 +14,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>${maven.version}</maven.version>
-        <camel.version>2.16.2</camel.version>
+        <camel.version>2.18.0</camel.version>
         <json-simple.version>1.1.1</json-simple.version>
-        <slf4j.version>1.7.19</slf4j.version>
+        <slf4j.version>1.7.21</slf4j.version>
         <commons-logging.version>1.2</commons-logging.version>
         <log4j.version>1.2.17</log4j.version>
-        <activemq.version>5.13.2</activemq.version>
+        <activemq.version>5.14.1</activemq.version>
         <junit.version>4.12</junit.version>
         <jaxb2-maven-plugin.version>2.2</jaxb2-maven-plugin.version>
     </properties>
