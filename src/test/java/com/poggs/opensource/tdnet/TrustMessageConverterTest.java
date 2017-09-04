@@ -9,22 +9,18 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * Tests for the TrustMessageConverter class
  */
 public class TrustMessageConverterTest extends CamelTestSupport {
 
-    @SuppressWarnings("unused")
-    @EndpointInject(uri="mock:result")
-    private MockEndpoint resultEndpoint;
-
-    @SuppressWarnings("unused")
-    @EndpointInject(uri="direct:start")
-    private ProducerTemplate template;
-
     private final String timestamp = "1451649600000";
+    @SuppressWarnings("unused")
+    @EndpointInject(uri = "mock:result")
+    private MockEndpoint resultEndpoint;
+    @SuppressWarnings("unused")
+    @EndpointInject(uri = "direct:start")
+    private ProducerTemplate template;
 
     @Override
     protected RouteBuilder createRouteBuilder() {
@@ -93,6 +89,16 @@ public class TrustMessageConverterTest extends CamelTestSupport {
 
         final String msgIn = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><TrainChangeIdentityMsgV1 xmlns=\"http://xml.networkrail.co.uk/ns/2008/Train\" xsi:schemaLocation=\"http://xml.networkrail.co.uk/ns/2008/Train itm_train_movement_messaging_v1.12.xsd\"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:eai=\"http://xml.networkrail.co.uk/ns/2008/EAI\" xmlns:nr=\"http://xml.networkrail.co.uk/ns/2008/NR\" classification=\"industry\" timestamp=\"2016-03-01T09:45:08-00:00\" owner=\"Network Rail\" originMsgId=\"2016-03-01T09:45:08-00:00@trmv.networkrail.co.uk\" ><eai:Sender organisation=\"Network Rail\" application=\"TRUST\" component=\"TOPS\" userID=\"\" sessionID=\"X282230\" /><TrainChangeIdentityData><OriginalTrainID>896M45CA01</OriginalTrainID><CurrentTrainID>890M45CA01</CurrentTrainID><EventTimestamp>2016-03-01T09:44:23-00:00</EventTimestamp><RevisedTrainID>896M45CA01</RevisedTrainID><TrainServiceCode>57610312</TrainServiceCode><TrainFileAddress>CQR</TrainFileAddress></TrainChangeIdentityData></TrainChangeIdentityMsgV1>";
         final String expectedMessageString = "{\"header\":{\"msg_type\":\"0007\",\"source_dev_id\":\"X282230\",\"user_id\":\"\",\"original_data_source\":\"TOPS\",\"msg_queue_timestamp\":\"1456825508000\",\"source_system_id\":\"TRUST\"},\"body\":{\"current_train_id\":\"890M45CA01\",\"train_file_address\":\"CQR\",\"train_service_code\":\"57610312\",\"revised_train_id\":\"896M45CA01\",\"train_id\":\"896M45CA01\",\"event_timestamp\":\"1456825463000\"}}";
+
+        CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
+
+    }
+
+    @Test
+    public void convertsChangeOfLocationMessage() throws Exception {
+
+        final String msgIn = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><TrainChangeLocationMsgV1 xmlns=\"http://xml.networkrail.co.uk/ns/2008/Train\" xsi:schemaLocation=\"http://xml.networkrail.co.uk/ns/2008/Train itm_train_movement_messaging_v1.12.xsd\"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:eai=\"http://xml.networkrail.co.uk/ns/2008/EAI\" xmlns:nr=\"http://xml.networkrail.co.uk/ns/2008/NR\" classification=\"industry\" timestamp=\"2017-05-09T23:01:03-00:00\" owner=\"Network Rail\" originMsgId=\"2017-05-09T23:01:03-00:00@trmv.networkrail.co.uk\" ><eai:Sender organisation=\"Network Rail\" application=\"TRUST\" component=\"TOPS\" userID=\"\" sessionID=\"XA82240\" /><TrainChangeLocationData><OriginalTrainID>867V98C310</OriginalTrainID><EventTimestamp>2017-05-10T00:00:25-00:00</EventTimestamp><LocationStanox>82100</LocationStanox><WTTTimestamp>2017-05-10T06:07:00-00:00</WTTTimestamp><OriginalLocationStanox>82101</OriginalLocationStanox><OriginalWTTTimestamp>2017-05-10T06:07:00-00:00</OriginalWTTTimestamp><TrainServiceCode>59120020</TrainServiceCode><TrainFileAddress>LGN</TrainFileAddress></TrainChangeLocationData></TrainChangeLocationMsgV1>";
+        final String expectedMessageString = "{\"header\":{\"msg_type\":\"0008\",\"source_dev_id\":\"XA82240\",\"user_id\":\"\",\"original_data_source\":\"TOPS\",\"msg_queue_timestamp\":\"1494370863000\",\"source_system_id\":\"TRUST\"},\"body\":{\"original_loc_timestamp\":\"1494396420000\",\"current_train_id\":\"\",\"train_file_address\":\"LGN\",\"train_service_code\":\"59120020\",\"dep_timestamp\":\"1494396420000\",\"loc_stanox\":\"82100\",\"train_id\":\"867V98C310\",\"original_loc_stanox\":\"82101\",\"event_timestamp\":\"1494374425000\"}}";
 
         CamelTestHelper.sendMessage(template, resultEndpoint, msgIn, expectedMessageString, timestamp);
 

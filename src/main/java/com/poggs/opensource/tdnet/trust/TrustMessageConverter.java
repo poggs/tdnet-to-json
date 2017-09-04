@@ -34,18 +34,20 @@ public class TrustMessageConverter implements Processor {
 
         String response = null;
 
-        if(msgOut.getClass() == TrainActivationMsgV1.class) {
+        if (msgOut.getClass() == TrainActivationMsgV1.class) {
             response = activationToJson((TrainActivationMsgV1) msgOut);
-        } else if(msgOut.getClass() == TrainCancellationMsgV1.class) {
+        } else if (msgOut.getClass() == TrainCancellationMsgV1.class) {
             response = cancellationToJson((TrainCancellationMsgV1) msgOut);
-        } else if(msgOut.getClass() == TrainMovementMsgV1.class) {
+        } else if (msgOut.getClass() == TrainMovementMsgV1.class) {
             response = movementToJson((TrainMovementMsgV1) msgOut);
-        } else if(msgOut.getClass() == TrainReinstatementMsgV1.class) {
+        } else if (msgOut.getClass() == TrainReinstatementMsgV1.class) {
             response = reinstatementToJson((TrainReinstatementMsgV1) msgOut);
-        } else if(msgOut.getClass() == TrainChangeOriginMsgV1.class) {
+        } else if (msgOut.getClass() == TrainChangeOriginMsgV1.class) {
             response = trainChangeOriginToJson((TrainChangeOriginMsgV1) msgOut);
-        } else if(msgOut.getClass() == TrainChangeIdentityMsgV1.class) {
+        } else if (msgOut.getClass() == TrainChangeIdentityMsgV1.class) {
             response = trainChangeIdentityToJson((TrainChangeIdentityMsgV1) msgOut);
+        } else if (msgOut.getClass() == TrainChangeLocationMsgV1.class) {
+            response = trainChangeLocationToJson((TrainChangeLocationMsgV1) msgOut);
         }
 
         exchange.getIn().setBody(response);
@@ -54,6 +56,7 @@ public class TrustMessageConverter implements Processor {
 
     /**
      * Convert a TrainActivationV1 message to JSON
+     *
      * @return A JSON type 001 message
      */
     @SuppressWarnings("unchecked")
@@ -99,6 +102,7 @@ public class TrustMessageConverter implements Processor {
 
     /**
      * Convert a TrainCancellationMsgV1 message to JSON
+     *
      * @return A JSON type 002 message
      */
     @SuppressWarnings("unchecked")
@@ -136,6 +140,7 @@ public class TrustMessageConverter implements Processor {
 
     /**
      * Convert a TrainMovementMsgV1 to JSON
+     *
      * @return A JSON type 003 message
      */
     @SuppressWarnings("unchecked")
@@ -171,7 +176,7 @@ public class TrustMessageConverter implements Processor {
 
         XMLGregorianCalendar originalWTTTimestamp = msg.getTrainMovementData().getOriginalWTTTimestamp();
 
-        if(originalWTTTimestamp == null) {
+        if (originalWTTTimestamp == null) {
             responseBody.put("original_loc_timestamp", "");
         } else {
             responseBody.put("original_loc_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainMovementData().getOriginalWTTTimestamp()));
@@ -198,6 +203,7 @@ public class TrustMessageConverter implements Processor {
 
     /**
      * Convert a TrainReinstatementMsgV1 to JSON
+     *
      * @return A JSON type 005 message
      */
     @SuppressWarnings("unchecked")
@@ -234,6 +240,7 @@ public class TrustMessageConverter implements Processor {
 
     /**
      * Convert a TrainChangeOriginMsgV1 to JSON
+     *
      * @return A JSON type 006 message
      */
     @SuppressWarnings("unchecked")
@@ -271,6 +278,7 @@ public class TrustMessageConverter implements Processor {
 
     /**
      * Convert a TrainChangeIdentityV1 to JSON
+     *
      * @return A JSON type 007 message
      */
     @SuppressWarnings("unchecked")
@@ -291,6 +299,41 @@ public class TrustMessageConverter implements Processor {
         responseBody.put("train_id", msg.getTrainChangeIdentityData().getOriginalTrainID());
         responseBody.put("revised_train_id", msg.getTrainChangeIdentityData().getRevisedTrainID());
         responseBody.put("train_file_address", msg.getTrainChangeIdentityData().getTrainFileAddress());
+
+        JSONObject response = new JSONObject();
+        response.put("header", responseHeader);
+        response.put("body", responseBody);
+
+        return response.toString();
+
+    }
+
+    /**
+     * Convert a TrainChangeLocationMsgV1 to JSON
+     *
+     * @return A JSON type 0008 message
+     */
+    @SuppressWarnings("unchecked")
+    private String trainChangeLocationToJson(TrainChangeLocationMsgV1 msg) {
+
+        JSONObject responseHeader = new JSONObject();
+        responseHeader.put("msg_type", "0008");
+        responseHeader.put("msg_queue_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTimestamp()));
+        responseHeader.put("original_data_source", msg.getSender().getComponent());
+        responseHeader.put("user_id", msg.getSender().getUserID());
+        responseHeader.put("source_dev_id", msg.getSender().getSessionID());
+        responseHeader.put("source_system_id", msg.getSender().getApplication());
+
+        JSONObject responseBody = new JSONObject();
+        responseBody.put("train_service_code", msg.getTrainChangeLocationData().getTrainServiceCode());
+        responseBody.put("original_loc_stanox", msg.getTrainChangeLocationData().getOriginalLocationStanox());
+        responseBody.put("dep_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainChangeLocationData().getWTTTimestamp()));
+        responseBody.put("current_train_id", MessageConverterHelper.emptyIfNull(msg.getTrainChangeLocationData().getCurrentTrainID()));
+        responseBody.put("event_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainChangeLocationData().getEventTimestamp()));
+        responseBody.put("train_id", msg.getTrainChangeLocationData().getOriginalTrainID());
+        responseBody.put("original_loc_timestamp", MessageConverterHelper.timestampToEpochSecs(msg.getTrainChangeLocationData().getOriginalWTTTimestamp()));
+        responseBody.put("train_file_address", msg.getTrainChangeLocationData().getTrainFileAddress());
+        responseBody.put("loc_stanox", msg.getTrainChangeLocationData().getLocationStanox());
 
         JSONObject response = new JSONObject();
         response.put("header", responseHeader);

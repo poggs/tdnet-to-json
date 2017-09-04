@@ -169,20 +169,20 @@ JSON message type '0007'
 
 ## TrainChangeLocationMsgV1
 
-JSON message type 'XXXX'
+JSON message type '0008'
 
-| XML                   | JSON                   | Type      |
-|-----------------------|------------------------|-----------|
-| OriginalTrainID       | train_id               | String    |
-| CurrentTrainID        |
-| EventTimestamp        |
-| LocationStanox        |
-| WTTTimestamp          |
-| OriginStanox          |
-| OriginalWTTTimestamp  |
-| TrainCancellationType |
-| TrainServiceCode      | train_service_code
-| ReasonCode            | reason_code
-| Division              | division
-| TOC                   | toc_id
-| TrainFileAddress      | train_file_address
+| XML                    | JSON                   | Type      |
+|------------------------|------------------------|-----------|
+| OriginalTrainID        | train_id               | String    |
+| CurrentTrainID         | current_train_id       | String    |
+| EventTimestamp         | event_timestamp        | Timestamp |
+| LocationStanox         | loc_stanox             | String    |
+| WTTTimestamp           | dep_timestamp          | String    |
+| OriginalLocationStanox | original_loc_stanox    | String    |
+| OriginalWTTTimestamp   | original_loc_timestamp | Timestamp |
+| TrainCancellationType  | canx_type              | String    |
+| TrainServiceCode       | train_service_code     | String    |
+| ReasonCode             | reason_code            | String    |
+| Division               | division               | String    |
+| TOC                    | toc_id                 | String    |
+| TrainFileAddress       | train_file_address     | String    |
