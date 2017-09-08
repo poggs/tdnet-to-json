@@ -3,6 +3,8 @@ package com.poggs.opensource.tdnet.td;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Converts a TD message in to a lightweight JSON format
@@ -11,6 +13,8 @@ import org.apache.camel.Processor;
  */
 @SuppressWarnings("unused")
 public class TdMessageConverter implements Processor {
+
+    Logger logger = LoggerFactory.getLogger(TdMessageConverter.class);
 
     public void process(Exchange exchange) throws Exception {
 
@@ -43,7 +47,7 @@ public class TdMessageConverter implements Processor {
                 outMessage = ShConverter.convertMessage(msg);
                 break;
             default:
-                System.out.println("No converter found for " + msg);
+                logger.error("No converter found for " + msg);
                 break;
         }
 
