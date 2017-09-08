@@ -10,6 +10,10 @@ import org.json.simple.JSONObject;
  */
 class SgConverter {
 
+    private SgConverter() {
+        throw new IllegalStateException("Utility class: cannot be instantiated");
+    }
+
     @SuppressWarnings("unchecked")
     public static String convertMessage(Message message) {
 

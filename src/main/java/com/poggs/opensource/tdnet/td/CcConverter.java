@@ -10,6 +10,10 @@ import org.json.simple.JSONObject;
  */
 class CcConverter {
 
+    private CcConverter() {
+        throw new IllegalStateException("Utility class: cannot be instantiated");
+    }
+
     @SuppressWarnings("unchecked")
     public static String convertMessage(Message message) {
 
