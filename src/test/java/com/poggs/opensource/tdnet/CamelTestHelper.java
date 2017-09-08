@@ -20,11 +20,12 @@ class CamelTestHelper {
 
     /**
      * Helper method to send a message through Camel and check the response
-     * @param template A ProducerTemplate
-     * @param resultEndpoint A MockEndpoint
-     * @param msgIn The input message as a String
+     *
+     * @param template              A ProducerTemplate
+     * @param resultEndpoint        A MockEndpoint
+     * @param msgIn                 The input message as a String
      * @param expectedMessageString The expected output message as a String
-     * @throws Exception
+     * @throws Exception if the message could not be processed
      */
     public static void sendMessage(ProducerTemplate template, MockEndpoint resultEndpoint, String msgIn, String expectedMessageString, String timestamp) throws Exception {
 
