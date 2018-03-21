@@ -9,17 +9,17 @@
     <packaging>jar</packaging>
     <name>TD.net to JSON converter</name>
     <description>Convert TD.net XML messages in to lightweight JSON</description>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>${maven.version}</maven.version>
-        <camel.version>2.19.2</camel.version>
+        <camel.version>2.21.0</camel.version>
         <json-simple.version>1.1.1</json-simple.version>
         <slf4j.version>1.7.21</slf4j.version>
         <commons-logging.version>1.2</commons-logging.version>
         <log4j.version>1.2.17</log4j.version>
-        <activemq.version>5.15.0</activemq.version>
+        <activemq.version>5.15.3</activemq.version>
         <junit.version>4.12</junit.version>
         <jaxb2-maven-plugin.version>2.2</jaxb2-maven-plugin.version>
     </properties>

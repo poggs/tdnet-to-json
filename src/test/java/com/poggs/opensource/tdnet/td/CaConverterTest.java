@@ -1,6 +1,8 @@
 package com.poggs.opensource.tdnet.td;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.Message;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultMessage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,7 +21,8 @@ public class CaConverterTest {
     @Test
     public void convertsMessage() throws ParseException {
 
-        Message msgIn = new DefaultMessage();
+        CamelContext camelContext = new DefaultCamelContext();
+        Message msgIn = new DefaultMessage(camelContext);
         msgIn.setHeader("JMSTimestamp", 1451649600000L);
         msgIn.setBody("<CA_MSG>BLCA010901111M61170754</CA_MSG>");
 
