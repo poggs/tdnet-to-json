@@ -1,3 +1,10 @@
+v1.4.1
+======
+
+ * Update ActiveMQ to 5.15.9
+ * Add SonarQube exclusion property for JABX-generated files
+ * Remove IDE configuration files
+
 v1.4
 ====
 
