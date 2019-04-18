@@ -16,7 +16,7 @@ public class TdMessageConverter implements Processor {
 
     Logger logger = LoggerFactory.getLogger(TdMessageConverter.class);
 
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
 
         Message msg = exchange.getIn();
 

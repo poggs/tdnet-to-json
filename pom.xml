@@ -22,7 +22,7 @@
         <activemq.version>5.15.9</activemq.version>
         <junit.version>4.12</junit.version>
         <jaxb2-maven-plugin.version>2.2</jaxb2-maven-plugin.version>
-        <sonar.exclusions>file:**/generated-sources/**</sonar.exclusions>
+        <sonar.exclusions>target/generated-sources/**</sonar.exclusions>
     </properties>
 
     <dependencies>
@@ -103,22 +103,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <packageName>com.poggs.opensource.tdnet.networkrail</packageName>
-                    <sources>
-                        <source>xml-schema/xsd</source>
-                    </sources>
-                    <xjbSources>
-                        <source>xml-schema/xjb</source>
-                    </xjbSources>
-                    <xjbExcludeFilters>
-                        <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
-                            <patterns>
-                                <pattern>\.gitignore</pattern>
-                            </patterns>
-                        </filter>
-                    </xjbExcludeFilters>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

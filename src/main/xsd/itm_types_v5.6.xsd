@@ -1,0 +1,968 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 sp1 (http://www.altova.com) by iinglis (Network Rail Infrastructure Ltd) -->
+<xsd:schema xmlns:itm="http://xml.networkrail.co.uk/ns/2008/Train" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:nr="http://xml.networkrail.co.uk/ns/2008/NR" targetNamespace="http://xml.networkrail.co.uk/ns/2008/Train" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:annotation>
+		<xsd:documentation>
+
+Train Management Types
+Change History
+=========
+Version	mm/yy	Author			Description
+---------	-------	------------	---------------------
+1.0			06/03	Di Joyce		Initial creation
+1.0			09/03	Di Joyce		itm_types_v2, Added BaseScheduleUID, trainOperationStatus
+2.0			02/04	Di Joyce		itm_types_v3, added target namespace, 
+												added complex and simple types from itm_vstp_v1.xsd, 
+												rationalised shared elements and attributers between itm_vstp_v2.xsd and itm_trainplan_v1.xsd and created common elements, 
+												whitespace collaspe removed from TrainPlatform, TrainRunningLine, TIPLOC, trainOperationStatus, RouteCoude
+												removed incorrect enumerations on location, platform, line, path, mileageFromOrigin, trainIdentity, trainServiceCode, routeCode, workingTime, publicTime
+3.0			04/04	D Flectcher	Renamed following items per changes detailed above, to V2
+												Added PlatformV2, RunningLineV2, TIPLOCV2, TrainOperationStatusV2, RouteCoudeV2, ScheduleLocationV2, ScheduleLocationV2
+4.0			02/07	J D'Arcy		Creation of 2007 schema
+5.0			01/08	J D'Arcy		Updated for 2008 schema and inorporates types to support TRUST schemas
+												namespace updated to 'itm'. Type definitions tightened up as well
+												(TrainIdentity, TRUSTTrainIdentity, STANOX, STANME moved to net_types)
+5.1			06/08	J D'Arcy		Changed LineType to be a single character field as enumerated range cannot be guaranteed.
+5.2			06/08 	J D'Arcy		Changed many types to replace length attribute with min length / max length pairs to enable Hub v5 validation to be performed correclty.
+5.3			12/08  	J D'Arcy		Addition of new type UpdateType
+5.4            03/09   J D'Arcy   		Updated type definitions for TRUSTAlertNumberType, WTTID and Train ID as they were too restrictive to cover all business needs. 
+5.5			07/09	J D'Arcy		Updated AttributionStatusType to include MERGED and added free text train id type TrainIDTextType.
+5.6			12/09	I Inglis		Update TRUSTDelayXrefType to allow 01-99 and 001-999 values
+
+(c) Copyright Network Rail
+
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:import namespace="http://xml.networkrail.co.uk/ns/2008/NR" schemaLocation="nr_types_v8.xsd"/>
+	<xsd:simpleType name="STANME">
+		<xsd:annotation>
+			<xsd:documentation>Short format name related to a STANOX</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="STANOX">
+		<xsd:annotation>
+			<xsd:documentation>Station number, actually a token of length 5, with only digits allowed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[\d]{5}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTIncidentIDType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Incident Identifier</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="12"/>
+			<xsd:maxLength value="12"/>
+			<xsd:pattern value="dddddddddddd"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTFaultNumberType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Fault Number</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="8"/>
+			<xsd:maxLength value="8"/>
+			<xsd:pattern value="dddddddddddd"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTRecordType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Record type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AC"/>
+			<xsd:enumeration value="AD"/>
+			<xsd:enumeration value="AE"/>
+			<xsd:enumeration value="AG"/>
+			<xsd:enumeration value="DC"/>
+			<xsd:enumeration value="DD"/>
+			<xsd:enumeration value="DE"/>
+			<xsd:enumeration value="DG"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTZoneType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Zone type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTAreaType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Area type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="2"/>
+			<xsd:maxLength value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTDAUpdateTypeType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST DA Update Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="S016"/>
+			<xsd:enumeration value="S017"/>
+			<xsd:enumeration value="S018"/>
+			<xsd:enumeration value="S027"/>
+			<xsd:enumeration value="T008"/>
+			<xsd:enumeration value="T009"/>
+			<xsd:enumeration value="T010"/>
+			<xsd:enumeration value="T011"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTSequenceType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Message Sequence Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="4"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTSiteIDType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST Site ID</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="4"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTNCIType">
+		<xsd:annotation>
+			<xsd:documentation>NCI Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="8"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTDelayXrefType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST delay code (01 - 99) or (001 - 999)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="2"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTAlertNumberType">
+		<xsd:annotation>
+			<xsd:documentation>A TRUST Alert identifier</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:nonNegativeInteger"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTRouteType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST RouteType</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTDAMessageType">
+		<xsd:annotation>
+			<xsd:documentation>TRUST DA Message Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="AlertHeaderType">
+		<xsd:annotation>
+			<xsd:documentation>Composite type used for TRUST Alert Headers</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Zone" type="itm:TRUSTZoneType"/>
+			<xsd:element name="Area" type="itm:TRUSTAreaType"/>
+			<xsd:element name="AlertNumber" type="itm:TRUSTAlertNumberType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DelayHeaderType">
+		<xsd:annotation>
+			<xsd:documentation>Composite type used in delay attribution structures</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DAUpdateType" type="itm:TRUSTDAUpdateTypeType"/>
+			<xsd:element name="Sequence" type="itm:TRUSTSequenceType" minOccurs="0"/>
+			<xsd:element name="SiteID" type="itm:TRUSTSiteIDType"/>
+			<xsd:element name="NCI" type="itm:TRUSTNCIType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="TIPLOCV2">
+		<xsd:annotation>
+			<xsd:documentation>TImingPointLOCation. Identity of a location used in scheduling. Upto 7 characters, based on truncated name of location.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="7"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="PlatformV2">
+		<xsd:annotation>
+			<xsd:documentation>Identifier of a platform at a location.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RunningLineV2">
+		<xsd:annotation>
+			<xsd:documentation>Identifier of a running line</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LocoClass">
+		<xsd:annotation>
+			<xsd:documentation>Class of a loco.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\d{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MultipleUnitClassType">
+		<xsd:annotation>
+			<xsd:documentation>Multiple Unit Class (100-999) of a vehicle.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[1-9][0-9][0-9]"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrainServiceCode">
+		<xsd:annotation>
+			<xsd:documentation>Used to group trains for billing purposes, also identifies TOC for train</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\d{8}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrainIdentity">
+		<xsd:annotation>
+			<xsd:documentation>The Train Identity, aka the Headcode is a four character identifier used for a train in control systems.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="4"/>
+			<xsd:maxLength value="4"/>
+			<xsd:pattern value="\d[A-Z]\d{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TSDBScheduleId">
+		<xsd:annotation>
+			<xsd:documentation>TSDB unique id for a service, part of the unique id for a schedule</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z\p{Nd}][\p{Nd}]{5}"/>
+			<xsd:pattern value=" "/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TSpeed">
+		<xsd:annotation>
+			<xsd:documentation>Character added by TOPS to TrainIdentity to ensure uniquenss of schedule</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z\p{Nd}]{1}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UWTTID">
+		<xsd:annotation>
+			<xsd:documentation>7-character unique schedule ID in TOPS, consisting of first 2 chars of origin Stanox, TrainIdentity, and TSpeed</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TOPSUID">
+		<xsd:annotation>
+			<xsd:documentation>Unique identity of schedule in TOPS</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[\d]{5}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRUSTTrainId">
+		<xsd:annotation>
+			<xsd:documentation>Unique ID of a train as created and used in TRUST. X(10).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="10"/>
+			<xsd:maxLength value="10"/>
+			<xsd:pattern value="\d{3}[A-Z0-9]\d{2}[A-Z\p{Nd}]{2}\d{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ScheduleType">
+		<xsd:annotation>
+			<xsd:documentation>C - (V)STP cancel variation;  N - new (V)STP (base). O for (V)STP overlay variation. ).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="N"/>
+			<xsd:enumeration value="O"/>
+			<xsd:enumeration value="C"/>
+			<xsd:enumeration value="P"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ScheduleSource">
+		<xsd:annotation>
+			<xsd:documentation>Source of schedule. C - CIF/TSDB;  V - VSTP/TOPS</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="C"/>
+			<xsd:enumeration value="V"/>
+			<xsd:enumeration value="TSDB"/>
+			<xsd:enumeration value="TOPS"/>
+			<xsd:enumeration value="NMC"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RANumber">
+		<xsd:annotation>
+			<xsd:documentation>TOPS Route Availability Number. from 01 to 10.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="(0[1-9])|10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BaseScheduleUID">
+		<xsd:annotation>
+			<xsd:documentation>Unique Schedule identifer</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="PerformanceAllowance">
+		<xsd:annotation>
+			<xsd:documentation>Allowance built into schedule for recovery time</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:duration"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="PathingAllowance">
+		<xsd:annotation>
+			<xsd:documentation>Allowance built into schedule for pathing conflicts</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:duration"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="EngineeringAllowance">
+		<xsd:annotation>
+			<xsd:documentation>Allowance built into schedule for engineering work</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:duration"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrainOperationStatusV2">
+		<xsd:annotation>
+			<xsd:documentation>Operational status of a train</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TransactionType">
+		<xsd:annotation>
+			<xsd:documentation>Type of transaction (new, replace, delete)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DELETE"/>
+			<xsd:enumeration value="NEW"/>
+			<xsd:enumeration value="REPLACE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BHXCode">
+		<xsd:annotation>
+			<xsd:documentation>Identifies trains not running on specified bank holidays.  X- UK, E- Edinburgh, G- Glasgow</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrainStatus">
+		<xsd:annotation>
+			<xsd:documentation>LTP: P= Passenger, F= Freight, T= Trip, S=Ship, B=Bus.  STP: 1= Passenger, 2= Freight, 3= Trip, 4=Ship, 5=Bus</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="P"/>
+			<xsd:enumeration value="F"/>
+			<xsd:enumeration value="T"/>
+			<xsd:enumeration value="S"/>
+			<xsd:enumeration value="B"/>
+			<xsd:enumeration value="1"/>
+			<xsd:enumeration value="2"/>
+			<xsd:enumeration value="3"/>
+			<xsd:enumeration value="4"/>
+			<xsd:enumeration value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RouteCodeV2">
+		<xsd:annotation>
+			<xsd:documentation>Line of route code for schedule, sometimes also called headcode</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="4"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BusinessSector">
+		<xsd:annotation>
+			<xsd:documentation>Business sector</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="PowerType">
+		<xsd:annotation>
+			<xsd:documentation>Type of train traction</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="D"/>
+			<xsd:enumeration value="DEM"/>
+			<xsd:enumeration value="DMU"/>
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="ED"/>
+			<xsd:enumeration value="EML"/>
+			<xsd:enumeration value="EMU"/>
+			<xsd:enumeration value="EPU"/>
+			<xsd:enumeration value="HST"/>
+			<xsd:enumeration value="LDS"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UnitClassRange">
+		<xsd:annotation>
+			<xsd:documentation>Timing load codes for MUs, where unit class not specified</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="A"/>
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="N"/>
+			<xsd:enumeration value="S"/>
+			<xsd:enumeration value="T"/>
+			<xsd:enumeration value="X"/>
+			<xsd:enumeration value="D1"/>
+			<xsd:enumeration value="D2"/>
+			<xsd:enumeration value="D3"/>
+			<xsd:enumeration value="D4"/>
+			<xsd:enumeration value="D1T"/>
+			<xsd:enumeration value="AT"/>
+			<xsd:enumeration value="V"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OpChar">
+		<xsd:annotation>
+			<xsd:documentation>Special operating codes for train schedule</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="B"/>
+			<xsd:enumeration value="C"/>
+			<xsd:enumeration value="D"/>
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="G"/>
+			<xsd:enumeration value="M"/>
+			<xsd:enumeration value="P"/>
+			<xsd:enumeration value="Q"/>
+			<xsd:enumeration value="R"/>
+			<xsd:enumeration value="S"/>
+			<xsd:enumeration value="Y"/>
+			<xsd:enumeration value="Z"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SeatingClass">
+		<xsd:annotation>
+			<xsd:documentation>Seating class available on train</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="B"/>
+			<xsd:enumeration value="S"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Sleepers">
+		<xsd:annotation>
+			<xsd:documentation>Sleeping class available on train</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="B"/>
+			<xsd:enumeration value="F"/>
+			<xsd:enumeration value="S"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Reservations">
+		<xsd:annotation>
+			<xsd:documentation>Whether reservations available, compulsory</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="Catering">
+		<xsd:annotation>
+			<xsd:documentation>Type of catering available</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="C"/>
+			<xsd:enumeration value="F"/>
+			<xsd:enumeration value="H"/>
+			<xsd:enumeration value="M"/>
+			<xsd:enumeration value="R"/>
+			<xsd:enumeration value="T"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ServiceBrand">
+		<xsd:annotation>
+			<xsd:documentation>Service brand (eg Eurostar)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="UICCode">
+		<xsd:annotation>
+			<xsd:documentation>UIC number assigne to international trains</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\d{5}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ATOCCode">
+		<xsd:annotation>
+			<xsd:documentation>Identifies operating company of train</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AM"/>
+			<xsd:enumeration value="AN"/>
+			<xsd:enumeration value="AR"/>
+			<xsd:enumeration value="CC"/>
+			<xsd:enumeration value="CH"/>
+			<xsd:enumeration value="CT"/>
+			<xsd:enumeration value="CX"/>
+			<xsd:enumeration value="ES"/>
+			<xsd:enumeration value="GE"/>
+			<xsd:enumeration value="GR"/>
+			<xsd:enumeration value="GW"/>
+			<xsd:enumeration value="GX"/>
+			<xsd:enumeration value="HT"/>
+			<xsd:enumeration value="HX"/>
+			<xsd:enumeration value="IL"/>
+			<xsd:enumeration value="ME"/>
+			<xsd:enumeration value="ML"/>
+			<xsd:enumeration value="NW"/>
+			<xsd:enumeration value="SN"/>
+			<xsd:enumeration value="SR"/>
+			<xsd:enumeration value="SS"/>
+			<xsd:enumeration value="SW"/>
+			<xsd:enumeration value="TL"/>
+			<xsd:enumeration value="TT"/>
+			<xsd:enumeration value="VL"/>
+			<xsd:enumeration value="VT"/>
+			<xsd:enumeration value="WB"/>
+			<xsd:enumeration value="WE"/>
+			<xsd:enumeration value="WN"/>
+			<xsd:enumeration value="WR"/>
+			<xsd:enumeration value="WW"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Activity">
+		<xsd:annotation>
+			<xsd:documentation>Activity performed by train at a location</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="A"/>
+			<xsd:enumeration value="AE"/>
+			<xsd:enumeration value="BL"/>
+			<xsd:enumeration value="C"/>
+			<xsd:enumeration value="D"/>
+			<xsd:enumeration value="-D"/>
+			<xsd:enumeration value="DX"/>
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="G"/>
+			<xsd:enumeration value="H"/>
+			<xsd:enumeration value="HH"/>
+			<xsd:enumeration value="K"/>
+			<xsd:enumeration value="KC"/>
+			<xsd:enumeration value="KE"/>
+			<xsd:enumeration value="KF"/>
+			<xsd:enumeration value="KS"/>
+			<xsd:enumeration value="L"/>
+			<xsd:enumeration value="N"/>
+			<xsd:enumeration value="NX"/>
+			<xsd:enumeration value="OP"/>
+			<xsd:enumeration value="OR"/>
+			<xsd:enumeration value="PR"/>
+			<xsd:enumeration value="R"/>
+			<xsd:enumeration value="RM"/>
+			<xsd:enumeration value="RR"/>
+			<xsd:enumeration value="S"/>
+			<xsd:enumeration value="T"/>
+			<xsd:enumeration value="-T"/>
+			<xsd:enumeration value="TB"/>
+			<xsd:enumeration value="TF"/>
+			<xsd:enumeration value="TS"/>
+			<xsd:enumeration value="TW"/>
+			<xsd:enumeration value="U"/>
+			<xsd:enumeration value="-U"/>
+			<xsd:enumeration value="UX"/>
+			<xsd:enumeration value="W"/>
+			<xsd:enumeration value="X"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="LocationTimes">
+		<xsd:annotation>
+			<xsd:documentation>Working and public times at a location</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="workingTime" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:time"/>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="publicTime" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:time"/>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="ScheduleLocationV2">
+		<xsd:annotation>
+			<xsd:documentation>Location on train journey</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="Arrive" type="itm:LocationTimes"/>
+				<xsd:element name="Depart" type="itm:LocationTimes"/>
+				<xsd:element name="Pass">
+					<xsd:complexType>
+						<xsd:attribute name="workingTime" type="xsd:time" use="optional"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="Activity" type="itm:Activity" minOccurs="0" maxOccurs="6"/>
+		</xsd:sequence>
+		<xsd:attribute name="locationType" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="origin"/>
+					<xsd:enumeration value="intermediate"/>
+					<xsd:enumeration value="destination"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="location" type="itm:TIPLOCV2" use="required"/>
+		<xsd:attribute name="callNumber" type="xsd:integer" use="required"/>
+		<xsd:attribute name="platform" type="itm:PlatformV2" use="optional"/>
+		<xsd:attribute name="line" type="itm:RunningLineV2" use="optional"/>
+		<xsd:attribute name="path" type="itm:RunningLineV2" use="optional"/>
+		<xsd:attribute name="engineeringAllowance" type="xsd:string" use="optional"/>
+		<xsd:attribute name="pathingAllowance" type="xsd:string" use="optional"/>
+		<xsd:attribute name="performanceAllowance" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="ScheduleSegment">
+		<xsd:annotation>
+			<xsd:documentation>Segment of train journey with constant header fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="UnitClassRange" type="itm:UnitClassRange"/>
+				<xsd:element name="TrailingLoad">
+					<xsd:simpleType>
+						<xsd:restriction base="nr:Kilogram"/>
+					</xsd:simpleType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="OpChar" type="itm:OpChar" minOccurs="0" maxOccurs="6"/>
+			<xsd:element name="Catering" type="itm:Catering" minOccurs="0" maxOccurs="2"/>
+			<xsd:element name="ScheduleLocationV2" type="itm:ScheduleLocationV2" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="trainCategory" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="2"/>
+					<xsd:enumeration value="XC"/>
+					<xsd:enumeration value="XD"/>
+					<xsd:enumeration value="XH"/>
+					<xsd:enumeration value="XI"/>
+					<xsd:enumeration value="XJ"/>
+					<xsd:enumeration value="XM"/>
+					<xsd:enumeration value="XR"/>
+					<xsd:enumeration value="XU"/>
+					<xsd:enumeration value="XZ"/>
+					<xsd:enumeration value="OH"/>
+					<xsd:enumeration value="OL"/>
+					<xsd:enumeration value="OM"/>
+					<xsd:enumeration value="OS"/>
+					<xsd:enumeration value="OU"/>
+					<xsd:enumeration value="OW"/>
+					<xsd:enumeration value="PP"/>
+					<xsd:enumeration value="PM"/>
+					<xsd:enumeration value="PJ"/>
+					<xsd:enumeration value="PE"/>
+					<xsd:enumeration value="PH"/>
+					<xsd:enumeration value="PL"/>
+					<xsd:enumeration value="PS"/>
+					<xsd:enumeration value="PV"/>
+					<xsd:enumeration value="H2"/>
+					<xsd:enumeration value="J2"/>
+					<xsd:enumeration value="J3"/>
+					<xsd:enumeration value="J4"/>
+					<xsd:enumeration value="J5"/>
+					<xsd:enumeration value="J6"/>
+					<xsd:enumeration value="H8"/>
+					<xsd:enumeration value="J8"/>
+					<xsd:enumeration value="H9"/>
+					<xsd:enumeration value="J9"/>
+					<xsd:enumeration value="H0"/>
+					<xsd:enumeration value="H1"/>
+					<xsd:enumeration value="H3"/>
+					<xsd:enumeration value="H4"/>
+					<xsd:enumeration value="H5"/>
+					<xsd:enumeration value="H6"/>
+					<xsd:enumeration value="A0"/>
+					<xsd:enumeration value="B0"/>
+					<xsd:enumeration value="E0"/>
+					<xsd:enumeration value="B1"/>
+					<xsd:enumeration value="B4"/>
+					<xsd:enumeration value="B5"/>
+					<xsd:enumeration value="B6"/>
+					<xsd:enumeration value="B7"/>
+					<xsd:enumeration value="DC"/>
+					<xsd:enumeration value="DD"/>
+					<xsd:enumeration value="DL"/>
+					<xsd:enumeration value="DO"/>
+					<xsd:enumeration value="DP"/>
+					<xsd:enumeration value="FF"/>
+					<xsd:enumeration value="GG"/>
+					<xsd:enumeration value="PES"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="trainIdentity" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="itm:TrainIdentity">
+					<xsd:maxLength value="4"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="trainServiceCode" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="itm:TrainServiceCode"/>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="powerType" type="itm:PowerType" use="required"/>
+		<xsd:attribute name="UICCode" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="itm:UICCode"/>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="routeCode" type="itm:RouteCodeV2" use="optional"/>
+		<xsd:attribute name="businessSector" type="itm:BusinessSector" use="optional"/>
+		<xsd:attribute name="speed" type="nr:mph" use="optional"/>
+		<xsd:attribute name="seatingClass" type="itm:SeatingClass" use="optional"/>
+		<xsd:attribute name="sleepers" type="itm:Sleepers" use="optional"/>
+		<xsd:attribute name="reservations" type="itm:Reservations" use="optional"/>
+		<xsd:attribute name="serviceBrand" type="itm:ServiceBrand" use="optional"/>
+		<xsd:attribute name="ATOCCode" type="itm:ATOCCode" use="optional"/>
+		<xsd:attribute name="TOPSCategory" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="profitCentre" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="8"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="sector" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="subSector" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="tractionClass" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="4"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:simpleType name="ApplicablePeriodStartDate">
+		<xsd:annotation>
+			<xsd:documentation>Timetable start date</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:date"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ApplicablePeriodEndDate">
+		<xsd:annotation>
+			<xsd:documentation>Timetable end date</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:date"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TDReportTime">
+		<xsd:annotation>
+			<xsd:documentation>Four character timestamp (hours and minutes) applied by TD</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="4"/>
+			<xsd:maxLength value="4"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="TrainID">
+		<xsd:annotation>
+			<xsd:documentation>Type that allows either a headcode or a 10 char train Id</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="TRUSTTrainId" type="itm:TRUSTTrainId"/>
+			<xsd:element name="TrainIdentify" type="itm:TrainIdentity"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="IncidentIDType">
+		<xsd:annotation>
+			<xsd:documentation>The key identifier for a delay alert requiring attribution</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="12"/>
+			<xsd:maxLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="WTTID">
+		<xsd:annotation>
+			<xsd:documentation>Headcode and top speed for a train</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="4"/>
+			<xsd:maxLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CancellationType">
+		<xsd:annotation>
+			<xsd:documentation>Reason for a train cancellation</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ON CALL"/>
+			<xsd:enumeration value="OUT OF PLAN"/>
+			<xsd:enumeration value="AT ORIGIN"/>
+			<xsd:enumeration value="EN ROUTE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrainMovementType">
+		<xsd:annotation>
+			<xsd:documentation>Arrival, Departure, Destination event</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ARRIVAL"/>
+			<xsd:enumeration value="DEPARTURE"/>
+			<xsd:enumeration value="DESTINATION"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="EventInitiationType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates whether the Event was Manually or Automatically Initiated</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="MANUAL"/>
+			<xsd:enumeration value="AUTOMATIC"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DirectionType">
+		<xsd:annotation>
+			<xsd:documentation>Describes the train direction</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="UP"/>
+			<xsd:enumeration value="DOWN"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DurationType">
+		<xsd:annotation>
+			<xsd:documentation>A train duration described in minutes</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:nonNegativeInteger">
+			<xsd:maxInclusive value="999"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="PlatformType">
+		<xsd:annotation>
+			<xsd:documentation>PlatformType</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LineType">
+		<xsd:annotation>
+			<xsd:documentation>Describes the train line</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DelayAlertReasonType">
+		<xsd:annotation>
+			<xsd:documentation>Describes the reason for an Alert</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EXPLAINED"/>
+			<xsd:enumeration value="UNEXPLAINED"/>
+			<xsd:enumeration value="FTS"/>
+			<xsd:enumeration value="CANCELLATION"/>
+			<xsd:enumeration value="COO"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AlertType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates an Alert or Alert Deletion type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ALERT"/>
+			<xsd:enumeration value="DELETION"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttributionStatusType">
+		<xsd:annotation>
+			<xsd:documentation>Status of an attribution</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ACCEPTED"/>
+			<xsd:enumeration value="DISPUTED"/>
+			<xsd:enumeration value="WAITING"/>
+			<xsd:enumeration value="MERGED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IncidentStatusType">
+		<xsd:annotation>
+			<xsd:documentation>Status of an incident</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="OPEN"/>
+			<xsd:enumeration value="CLOSED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="EventSourceType">
+		<xsd:annotation>
+			<xsd:documentation>Manual or Automatic train call</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="MANUAL"/>
+			<xsd:enumeration value="AUTOMATIC"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UpdateType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates what type of Update has been performed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="INSERT"/>
+			<xsd:enumeration value="CHANGE"/>
+			<xsd:enumeration value="DELETE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrainIdTextType">
+		<xsd:annotation>
+			<xsd:documentation>Type to allow for 10 character free text train id.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

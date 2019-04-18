@@ -2,8 +2,10 @@ v1.4.1
 ======
 
  * Update ActiveMQ to 5.15.9
- * Add SonarQube exclusion property for JABX-generated files
+ * Add SonarQube exclusion property for JAXB-generated files
  * Remove IDE configuration files
+ * Move XSDs to standard directory
+ * Reconfigure JAXB to place generated sources in target/
 
 v1.4
 ====

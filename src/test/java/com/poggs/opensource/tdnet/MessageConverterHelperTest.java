@@ -46,7 +46,7 @@ public class MessageConverterHelperTest {
     }
 
     @Test
-    public void returnsNullWhenXMLGregorianCalendarObjectIsNull() throws DatatypeConfigurationException {
+    public void returnsNullWhenXMLGregorianCalendarObjectIsNull() {
         String result = MessageConverterHelper.timestampToEpochSecs(null);
         assertEquals("", result);
     }
