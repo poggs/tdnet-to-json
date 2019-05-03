@@ -1,3 +1,8 @@
+v1.4.2
+======
+
+ * Update Camel in response to CVE-2019-0194
+
 v1.4.1
 ======
 
